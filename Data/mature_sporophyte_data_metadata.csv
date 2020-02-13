@@ -1,0 +1,165 @@
+This Mature Sporophyte Data readme file was generated on 20200211 by David Bilderback,
+,
+_______________________________________,
+GENERAL INFORMATION,
+_______________________________________,
+,
+Title of dataset: ,Mature Sporophyte Data
+,
+Author Information,
+,
+Principal Investigator Contact Information,
+Name: ,David Bilderback
+Institution:,INST
+Address: ,"3830 Beach Loop Dr. SW, Bandon, OR 97411"
+Email: ,ddbilderback@gmail.com
+,
+Associate Investigator Contact Information,
+Name:,NA
+Institution:,NA
+Address:,NA
+Email:,NA
+,
+Alternate Contact Information,
+Name:,NA
+Institution:,NA
+Address:,NA
+Email:,NA
+,
+"Date of data collection (single date, range, approximate date):",20180508:20200211
+,
+Geographic location of data collection: ,"One km transect on the Bandon, Oregon beach centered at N 43.08455 W 124.43590"
+,
+Funding sources that supported the collection of the data: ,NA
+,
+_______________________________________,
+SHARING/ACCESS INFORMATION,
+_______________________________________,
+,
+Licenses/restrictions placed on the data: ,NA
+,
+Links to publications that cite or use the data:,NA
+,
+Links to other publicly accessible location of the data:,NA
+,
+Links/relationships to ancillary data sets:,NA
+,
+Was data derived from another source? ,Yes 
+"If yes, list source: ",Hand-written field data
+,
+Recommended citation for the data:,NA
+,
+_______________________________________,
+DATA/FILE OVERVIEW,
+_______________________________________,
+,
+File List,
+Filename: ,mature_sporophyte_data.csv
+Short description: ,Various measurements of intact  sporophytes of Nereocystis luetkeana that had sori or stipes greater than 180 cm.
+,
+Filename:,NA
+Short description:,NA
+,
+Filename:,NA
+Short description:,NA
+,
+Relationship between files:,NA
+,
+Additional related data collected that was not included in the current data package: ,The wet weight of some of the kelp canopies were recorded. See Biomass dataset.
+,
+Are there multiple versions of the dataset? ,Yes 
+"If yes, list versions",
+Name of file that was updated: ,Mature Sporophytes data metadata.xlsx
+Why was the file updated? ,Changed format by Ross Whippo for analyses and version control.
+When was the file updated? ,20200213
+Name of file that was updated:,NA
+Why was the file updated?,NA
+When was the file updated?,NA
+,
+_______________________________________,
+METHODOLOGICAL INFORMATION,
+_______________________________________,
+,
+Description of methods used for collection/generation of data:,"All intact, mature sporophytes with a holdfast, stipe, bulb and blades were measured on the beach.  The length of stipe was measured to the nearest cm.  The circumference of the bulb was measured to the nearest 0.1 cm, and the diameter was determined using the OmniCircumference Calculator on the Web.  The widest sterile or fertile blade was measured to  the nearest 0.1 cm.  The number of intact sori, releasing sori and abscised sori on the widest fertile blade was recorded.  The algal epiphytes, barnacles and hydroids on the stipe were recorded.  For wet weight biomass, the stipe was excised at 15 cm below the blade attachment. The blade was washed in ocean or creek water, drained and placed in a slingand weighed using a Modern Step Hanging Scale."
+<include links or references to publications or other documentation containing experimental design or protocols used in data collection>,
+,
+,
+Methods for processing the data:,METHODS
+<describe how  the submitted data were generated from raw or collected data>,
+,
+Instrument- or software-specific information needed to interpret the data:,NA
+,
+"Standards and calibration information, if appropriate:",NA
+,
+Environmental/experimental conditions:,CONDITIONS
+,
+Describe any quality-assurance procedures performed on the data:,QAQC
+,
+"People involved with sample collection, processing, analysis and/or submission:",David Bilderback
+,
+_______________________________________,
+DATA-SPECIFIC INFORMATION FOR: FILENAME,
+_______________________________________,
+<create sections for each dataset (or file if appropriate) included>,
+,
+Number of variables: ,11
+,
+Number of cases/rows:,2232
+,
+Variable List,
+Name: ,date
+Description: ,The day that the transect was surveyed.
+Value labels:,IF APPROPRIATE
+,
+Name: ,stipe_length
+Description: ,Length of stipe to 15 cm below the attachment of the blades to the nearest cm.
+Value labels: ,cm to the nearest cm
+,
+Name: ,bulb_diam
+Description: ,The length of the diameter of the bulb as transformed from the bulb circumference to the nearest 0.1 cm.
+Value labels: ,cm to the nearest mm
+,
+Name: ,blade_width
+Description: ,The width of the widest blade of the sporophyte to the nearest 0.1 cm.
+Value labels: ,cm to the nearest mm
+,
+Name:  ,sori_num
+Description: ,The number of intact sori on the widest blade of the sporophyte.
+Value labels:,IF APPROPRIATE
+,
+Name: ,re_sori_num
+Description: ,The number of sori releasing propagules on the the widest fertile blade.
+Value labels:,IF APPROPRIATE
+,
+Name: ,absd_sori_num
+Description: ,The number of sori that had abscised from the widest fertile blade.
+Value labels:,
+,epiph_1 | epiph_2 | epiph_3
+Name: ,
+Description: ,"The algal epiphytes, barnacles and hydroids found on the stipe."
+Value labels: ,An = Antithamnionella
+,Ba = Barnacle 
+,Cy = Cyprids
+,Gb = Gooseneck Barnacle 
+,Hy = Hydroid 
+,Po = Polysiphonia
+,Py = Pyropia 
+,Ul = Ulva
+,
+Missing data codes,
+Code/symbol: ,none
+Definition: ,"In the stipe column, none means that no kelp were found on the beach."
+,
+Code/symbol: ,none
+Definition: ,"In the epiphyte columns, none means that there were no epiphytes observed."
+,
+Code/symbol: ,NA
+Value labels: ,NA means that no measurements were taken because no kelp was present.
+,
+Code/symbol: ,nd
+Value labels: ,"nd means that although data existed, it was not measured, or the tip of blade was missing and number of abscised sori could not be determined. "
+,
+,
+Specialized formats of other abbreviations used:,NA
+,
+<<<<<<<<<<END OF METADATA>>>>>>>>>>,
