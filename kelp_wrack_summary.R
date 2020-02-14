@@ -91,6 +91,21 @@ young_sporophyte$date <- young_sporophyte$date %>%
          "6/17/2028" = "6/17/2018")
 young_sporophyte$date <- as.Date(young_sporophyte$date, format = "%m/%d/%Y")
 
+# import NOAA weather data
+noaa_portorford_buoydata_2018 <- read_table2("Data/noaa_portorford_buoydata_2018.csv", 
+                                             col_types = cols(ATMP = col_number(), 
+                                                              GST = col_number(), 
+                                                              PRES = col_number(), 
+                                                              WSPD = col_number(), 
+                                                              WTMP = col_number()))
+
+# remove first metadata row
+noaa_portorford_buoydata_2018 <- noaa_portorford_buoydata_2018[-1,]
+
+# create date/time column
+noaa_portorford_buoydata_2018 <- noaa_portorford_buoydata_2018 %>%
+  unite("date", YY:DD, sep = "-", remove = FALSE)
+noaa_portorford_buoydata_2018$date <- as.Date(noaa_portorford_buoydata_2018$date)
 
 ###################################################################################
 # VISUALIZATIONS                                                                  #
@@ -99,17 +114,41 @@ young_sporophyte$date <- as.Date(young_sporophyte$date, format = "%m/%d/%Y")
 # mature date by blade width (same as Dave's w/ extras)
 ggplot(mature_sporophyte, aes(x = date, y = blade_width, color = sori_num, size = stipe_length)) +
   geom_point() +
-  scale_colour_viridis()
+  scale_colour_viridis() +
+  geom_vline(data = gust_mean_15m, aes(xintercept = as.numeric(date)),
+             color = "red")
+
 
 # young date by stipe length
 ggplot(young_sporophyte, aes(x = date, y = stipe, color = group)) +
   geom_point() +
   scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
 
-# mature stipe by blade
+# mature stipe by bladeunite(data, col, ..., sep = "_"
 ggplot(mature_sporophyte, aes(x = stipe_length, y = blade_width, color = sori_num, size = bulb_diam)) +
   geom_point() +
   scale_colour_viridis()
+
+###################################################################################
+# NOAA WEATHER DATA                                                               #
+###################################################################################
+
+# daily means of wind
+daily_wind_means <- noaa_portorford_buoydata_2018 %>%
+  group_by(date) %>%
+  summarise_at(c("WSPD", "GST"), mean, na.rm = TRUE)
+
+# extract mean gusts > 10 m/s
+gust_mean_10m <- daily_wind_means %>%
+  filter(GST > 10)
+
+# extract mean gusts > 15 m/s
+gust_mean_15m <- daily_wind_means %>%
+  filter(GST > 15)
+
+ggplot(daily_wind_means, aes(x = date, y = GST)) +
+  geom_point()
+
 
 
 ############### SUBSECTION HERE
