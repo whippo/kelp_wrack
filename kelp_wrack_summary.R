@@ -45,6 +45,7 @@
 library(tidyverse)
 library(readr)
 library(viridis)
+library(lme4)
 
 
 ###################################################################################
@@ -67,8 +68,11 @@ mature_sporophyte <- mature_sporophyte %>%
   filter(date != "1/3/1900") 
 mature_sporophyte$date <- mature_sporophyte$date %>%
   recode("7/12/2008" = "7/12/2018")
-mature_sporophyte$date <- as.Date(mature_sporophyte$date, format = "%m/%d/%Y")
-                                 
+mature_sporophyte$date <- as.Date(mature_sporophyte$date, format = "%m/%d/%Y") 
+
+# fix bulb diameter mistake
+mature_sporophyte <- mature_sporophyte %>% 
+  mutate(bulb_diam = replace(bulb_diam, bulb_diam == 72, 7.2))
                                 
 # read in young dataset
 young_sporophyte <- read_csv("Data/young_sporophyte_data.csv", 
@@ -129,6 +133,19 @@ ggplot(mature_sporophyte, aes(x = stipe_length, y = blade_width, color = sori_nu
   geom_point() +
   scale_colour_viridis()
 
+# mature stipe blade width by sori number
+ggplot(mature_sporophyte, aes(x = as.factor(sori_num), y = blade_width)) +
+  geom_boxplot() +
+  scale_colour_viridis()
+
+blade_sori_fit <- lm(sori_num ~ blade_width, data = mature_sporophyte)
+summary(blade_sori_fit)
+
+# mature stipe length by bulb diameter
+ggplot(mature_sporophyte, aes(x = stipe_length, y = bulb_diam)) +
+  geom_point() +
+  geom_smooth(method='gam', formula = y ~ s(log(x)))
+
 ###################################################################################
 # NOAA WEATHER DATA                                                               #
 ###################################################################################
@@ -149,9 +166,64 @@ gust_mean_15m <- daily_wind_means %>%
 ggplot(daily_wind_means, aes(x = date, y = GST)) +
   geom_point()
 
+## test do high wrack days follow windy days?
+
+# tally number of obs per day
+wrack_obs <- mature_sporophyte %>%
+  group_by(date) %>%
+  tally()
+
+# reduce number of days to match weather data
+wrack_obs_reduced <- wrack_obs %>%
+  filter(date %in% daily_wind_means_char$date)
+
+# make date a character vector in new winds dataset for joining
+daily_wind_means_char <- daily_wind_means
+
+# join to wind data
+wrack_by_wind <- left_join(wrack_obs, daily_wind_means_char, by = "date")
+
+# quick plot of GST by wrack
+ggplot(wrack_by_wind, aes(x = GST, y = n)) +
+  geom_point()
+
+# linear model wind gust means 
+lm(n ~ GST, data = wrack_by_wind)
+
+# test by offset dataset
+wrack_by_wind_offset <- mutate(wrack_by_wind_value, offset = lag(n = 5, n, order_by = date))
+
+# plot of offset
+ggplot(wrack_by_wind_offset, aes(x = GST, y = offset)) +
+  geom_point()
 
 
-############### SUBSECTION HERE
+### Use selection model to determine if gust, wind, have effect on number of wrack observations
+
+wrack_offset <- wrack_by_wind
+wrack_offset1 <- mutate(wrack_by_wind, offset1 = lead(n = 1, WSPD, order_by = date))
+wrack_offset2 <- mutate(wrack_by_wind, offset2 = lead(n = 2, WSPD, order_by = date))
+wrack_offset3 <- mutate(wrack_by_wind, offset3 = lead(n = 3, WSPD, order_by = date))
+wrack_offset4 <- mutate(wrack_by_wind, offset4 = lead(n = 4, WSPD, order_by = date))
+wrack_offset5 <- mutate(wrack_by_wind, offset5 = lead(n = 5, WSPD, order_by = date))
+wrack_offset6 <- mutate(wrack_by_wind, offset6 = lead(n = 6, WSPD, order_by = date))
+wrack_offset7 <- mutate(wrack_by_wind, offset7 = lead(n = 7, WSPD, order_by = date))
+total_wrack_offset <- wrack_offset
+total_wrack_offset$offset1 <- wrack_offset1$offset1
+total_wrack_offset$offset2 <- wrack_offset2$offset2
+total_wrack_offset$offset3 <- wrack_offset3$offset3
+total_wrack_offset$offset4 <- wrack_offset4$offset4
+total_wrack_offset$offset5 <- wrack_offset5$offset5
+total_wrack_offset$offset6 <- wrack_offset6$offset6
+total_wrack_offset$offset7 <- wrack_offset7$offset7
+
+wrack_fit <- lm(n ~ WSPD + offset1 + offset2 + offset3 + offset4 + offset5 + offset6 + offset7, data = total_wrack_offset)
+summary(wrack_fit)
+
+
+
+
+  ############### SUBSECTION HERE
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
