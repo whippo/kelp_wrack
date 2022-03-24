@@ -43,7 +43,6 @@
 ###################################################################################
 
 library(tidyverse)
-library(readr)
 library(viridis)
 library(lme4)
 
@@ -96,7 +95,7 @@ young_sporophyte$date <- young_sporophyte$date %>%
 young_sporophyte$date <- as.Date(young_sporophyte$date, format = "%m/%d/%Y")
 
 # import NOAA weather data
-noaa_portorford_buoydata_2018 <- read_table2("Data/noaa_portorford_buoydata_2018.csv", 
+noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
                                              col_types = cols(ATMP = col_number(), 
                                                               GST = col_number(), 
                                                               PRES = col_number(), 
@@ -111,40 +110,6 @@ noaa_portorford_buoydata_2018 <- noaa_portorford_buoydata_2018 %>%
   unite("date", YY:DD, sep = "-", remove = FALSE)
 noaa_portorford_buoydata_2018$date <- as.Date(noaa_portorford_buoydata_2018$date)
 
-###################################################################################
-# VISUALIZATIONS                                                                  #
-###################################################################################
-
-# mature date by blade width (same as Dave's w/ extras)
-ggplot(mature_sporophyte, aes(x = date, y = blade_width, color = sori_num, size = stipe_length)) +
-  geom_point() +
-  scale_colour_viridis() +
-  geom_vline(data = gust_mean_15m, aes(xintercept = as.numeric(date)),
-             color = "red")
-
-
-# young date by stipe length
-ggplot(young_sporophyte, aes(x = date, y = stipe, color = group)) +
-  geom_point() +
-  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
-
-# mature stipe by bladeunite(data, col, ..., sep = "_"
-ggplot(mature_sporophyte, aes(x = stipe_length, y = blade_width, color = sori_num, size = bulb_diam)) +
-  geom_point() +
-  scale_colour_viridis()
-
-# mature stipe blade width by sori number
-ggplot(mature_sporophyte, aes(x = as.factor(sori_num), y = blade_width)) +
-  geom_boxplot() +
-  scale_colour_viridis()
-
-blade_sori_fit <- lm(sori_num ~ blade_width, data = mature_sporophyte)
-summary(blade_sori_fit)
-
-# mature stipe length by bulb diameter
-ggplot(mature_sporophyte, aes(x = stipe_length, y = bulb_diam)) +
-  geom_point() +
-  geom_smooth(method='gam', formula = y ~ s(log(x)))
 
 ###################################################################################
 # NOAA WEATHER DATA                                                               #
@@ -173,12 +138,13 @@ wrack_obs <- mature_sporophyte %>%
   group_by(date) %>%
   tally()
 
+# make date a character vector in new winds dataset for joining
+daily_wind_means_char <- daily_wind_means
+
 # reduce number of days to match weather data
 wrack_obs_reduced <- wrack_obs %>%
   filter(date %in% daily_wind_means_char$date)
 
-# make date a character vector in new winds dataset for joining
-daily_wind_means_char <- daily_wind_means
 
 # join to wind data
 wrack_by_wind <- left_join(wrack_obs, daily_wind_means_char, by = "date")
@@ -220,7 +186,53 @@ total_wrack_offset$offset7 <- wrack_offset7$offset7
 wrack_fit <- lm(n ~ WSPD + offset1 + offset2 + offset3 + offset4 + offset5 + offset6 + offset7, data = total_wrack_offset)
 summary(wrack_fit)
 
+###################################################################################
+# VISUALIZATIONS                                                                  #
+###################################################################################
 
+# mature date by blade width (same as Dave's w/ extras)
+ggplot(mature_sporophyte, aes(x = date, y = blade_width, color = sori_num, size = stipe_length)) +
+  geom_point() +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date("2018-01-01"), xmax = as.Date("2018-06-23"), 
+           ymin = -Inf, ymax = Inf, 
+           alpha = .1) +
+  annotate("rect", xmin = as.Date("2018-12-23"), xmax = as.Date("2019-06-23"), 
+           ymin = -Inf, ymax = Inf, 
+           alpha = .1) +
+  annotate("rect", xmin = as.Date("2019-12-23"), xmax = as.Date("2020-04-27"), 
+           ymin = -Inf, ymax = Inf, 
+           alpha = .1) +
+  scale_colour_viridis() +
+  geom_vline(data = gust_mean_15m, aes(xintercept = as.numeric(date)),
+             color = "red") +
+  labs(color = "Number of sori", size = "Stipe length (cm)") + # give the legend the name 
+  xlab("Date") + # label for x axis
+  ylab("Blade width (cm)") # label for y axis
+
+
+# young date by stipe length
+ggplot(young_sporophyte, aes(x = date, y = stipe, color = group)) +
+  geom_point() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
+
+# mature stipe by bladeunite(data, col, ..., sep = "_"
+ggplot(mature_sporophyte, aes(x = stipe_length, y = blade_width, color = sori_num, size = bulb_diam)) +
+  geom_point() +
+  scale_colour_viridis()
+
+# mature stipe blade width by sori number
+ggplot(mature_sporophyte, aes(x = as.factor(sori_num), y = blade_width)) +
+  geom_boxplot() +
+  scale_colour_viridis()
+
+blade_sori_fit <- lm(sori_num ~ blade_width, data = mature_sporophyte)
+summary(blade_sori_fit)
+
+# mature stipe length by bulb diameter
+ggplot(mature_sporophyte, aes(x = stipe_length, y = bulb_diam)) +
+  geom_point() +
+  geom_smooth(method='gam', formula = y ~ s(log(x)))
 
 
   ############### SUBSECTION HERE
