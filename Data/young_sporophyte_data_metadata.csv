@@ -1,18 +1,18 @@
-This Young Sporophyte readme file was generated on 20191225 by David Bilderback,
+This DATASETNAMEreadme file was generated on 20191225 by David Bilderback,
 ,
 _______________________________________,
 GENERAL INFORMATION,
 _______________________________________,
 ,
-Title of dataset: ,Young Sporophyte 
+Title of dataset: Young Sporophyte ,TITLE
 ,
 Author Information,
 ,
 Principal Investigator Contact Information,
-Name:,David Bilderback 
+Name:David Bilderback ,
 Institution:,INST
-Address: ,"3830 Beach Loop Drive SW, Bandon, OR 97411"
-Email: ,ddbilderback @gmail.com
+"Address: 3830 Beach Loop Drive SW, Bandon, OR 97411",ADD
+Email: ddbilderback @gmail.com,EM
 ,
 Associate Investigator Contact Information,
 Name:,NA
@@ -26,10 +26,10 @@ Institution:,NA
 Address:,NA
 Email:,NA
 ,
-"Date of data collection (single date, range, approximate date): ",20180408:20200211
+"Date of data collection (single date, range, approximate date): 20180408 to",YYYYMMDD
 ,
-Geographic location of data collection: ,"One kilometer transect on Bandon, Oregon beach centered at about N 43.08455 W 124.43590  "
-,
+"Geographic location of data collection: One kilometer transect on Bandon, Oregon beach ",LOCATION
+centered at about N 43.08455 W 124.43590 ,
 Funding sources that supported the collection of the data: ,NA
 ,
 _______________________________________,
@@ -44,8 +44,8 @@ Links to other publicly accessible location of the data:,NA
 ,
 Links/relationships to ancillary data sets:,NA
 ,
-Was data derived from another source? ,Yes 
-"If yes, list source: ",Hand-written field data
+Was data derived from another source? Yes,YES/NO
+"If yes, list source: Hand-written field data",NA
 ,
 Recommended citation for the data:,NA
 ,
@@ -54,9 +54,9 @@ DATA/FILE OVERVIEW,
 _______________________________________,
 ,
 File List,
-Filename: ,young_sporophyte_data.csv
-Short description: ,Various measurements of intact young sporophytes of Nereocystis luetkeana with stipes not exceding 180 cm.
-,
+Filename: Young Sporophyte data metadata ,FILENAME.EXT
+Short description: Various measurements of intact young sporophytes of Nereocystis luetkeana ,DESCRIPTION
+with stipes not exceding 180 cm.,
 ,
 Filename:,NA
 Short description:,NA
@@ -66,14 +66,14 @@ Short description:,NA
 ,
 Relationship between files:,NA
 ,
-Additional related data collected that was not included in the current data package: ,"On a few occasions, intact, snapped and chewed young sporophytes were counted. "
+Additional related data collected that was not included in the current data package: On a few ,NA
+"occasions, intact, snapped and chewed young sporophytes were counted. ",
 ,
-,
-Are there multiple versions of the dataset? ,Yes 
+Are there multiple versions of the dataset? No,YES/NO
 "If yes, list versions",
-Name of file that was updated: ,Young Sporophytes data metadata.xlsx
-Why was the file updated? ,Parsed into component sheets and version control by Ross Whippo 
-When was the file updated?,20200213
+Name of file that was updated: Young Sporophytes,NA
+Why was the file updated? New data ,NA
+When was the file updated? Nearly daily,NA
 Name of file that was updated:,NA
 Why was the file updated?,NA
 When was the file updated?,NA
@@ -82,11 +82,14 @@ _______________________________________,
 METHODOLOGICAL INFORMATION,
 _______________________________________,
 ,
-Description of methods used for collection/generation of data:,"All intact, individual young sporophytes and clusters  of young sporophytes with holdfasts, stipes, bulbs and blades were collected and brought to the  lab.  The diameter of some holdfasts were measured to the nearest mm.  Because of the elasticity of the stipe, its length was measured to the nearest 0.5 cm.  The diameter of the bulb was measured with a caliper to the nearest mm.  The width of some of the widest blades were measured to the nearest mm."
+Description of methods used for collection/generation of data:,METHODS
 <include links or references to publications or other documentation containing experimental ,
-design or protocols used in data collection> ,
-,
-,
+"design or protocols used in data collection> All intact, individual young sporophytes and clusters  ",
+"of young sporophytes with holdfasts, stipes, bulbs and blades were collected and brought to the  ",
+lab.  The diameter of some holdfasts were measured to the nearest mm.  Because of the ,
+"elasticity of the stipe, its length was measured tothe nearest 0.5 cm.  The diameter of the bulb",
+was measured with a caliper to the nearest mm.  The width of some of the widest blades were,
+measured to the nearest mm.,
 Methods for processing the data:,METHODS
 <describe how  the submitted data were generated from raw or collected data>,
 ,
@@ -98,114 +101,137 @@ Environmental/experimental conditions:,CONDITIONS
 ,
 Describe any quality-assurance procedures performed on the data:,QAQC
 ,
-"People involved with sample collection, processing, analysis and/or submission:",David Bilderback 
+"People involved with sample collection, processing, analysis and/or submission:",PARTICIPANTS
+David Bilderback,
 _______________________________________,
 DATA-SPECIFIC INFORMATION FOR: FILENAME,
 _______________________________________,
 <create sections for each dataset (or file if appropriate) included>,
 ,
-Number of variables: ,12
+Number of variables: 12,NUM VARIABLES
 ,
-Number of cases/rows:,3483
+Number of cases/rows:,NUM ROWS
 ,
 Variable List,
-Name: ,Stipe
-Description: ,The length of the stipe from the holdfast to the bulb.
-Value labels: ,cm to the nearest 0.5 cm
+Name: Stipe,VARIABLE NAME
+Description: The length of the stipe from the holdfast to the bulb.,VARIABLE DESCRIPTION
+Value labels: cm to the nearest 0.5 cm,IF APPROPRIATE
 ,
-Name: ,Bulb
-Description: ,The diameter of the bulb as measured with a caliper.
-Value labels: ,cm to the nearest mm
+Name: Bulb,VARIABLE NAME
+Description: The diameter of the bulb as measured with a caliper.,VARIABLE DESCRIPTION
+Value labels: cm to the nearest mm,IF APPROPRIATE
 ,
-Name: ,Blade
-Description: ,The width of the widest blade. 
-Value labels: ,cm to the nearest mm
+Name: Blade,
+Description: The width of the widest blade. ,
+Value labels: cm to the nearest mm,
 ,
-"nd means that although data existed, it was not measured. ",Ho Fa (Holdfast)
-Description: ,The diameter of the widest portion of the holdfast.
-Value labels: ,cm to the nearest mm
+Name: Ho Fa (Holdfast),
+Description: The diameter of the widest portion of the holdfast.,
+Value labels: cm to the nearest mm,
 ,
-Name: ,Single
-Description: ,The sporophyte exists as a single individual.
-Value labels: ,"1 = a single individual is present, 0 = a single individual is not present "
+Name: Single,VARIABLE NAME
+Description: The sporophyte exists as a single individual.,VARIABLE DESCRIPTION
+"Value labels: 1 = a single individual is present, 0 = a single individual is not present ",IF APPROPRIATE
 ,
-Name: ,Group
-Description: ,The sporophytes were aggregated together.
-Value labels: ,1 = a sporophyte is a member of a cluster of sporophytes. 0 = a single individual sporophyte is present 
+Name: Group,VARIABLE NAME
+Description: The sporophytes were aggregated together.,VARIABLE DESCRIPTION
+Value labels: 1 = a sporophyte is a member of a cluster of sporophytes. 0 = a single individual,IF APPROPRIATE
+sporophyte is present ,
 ,
+Name: Subst (Substrate),VARIABLE NAME
+Description: The substrate adhering to the holdfast of the sporophyte.,VARIABLE DESCRIPTION
+Value labels: Am = Alaria marginata,IF APPROPRIATE
+                        Ba = Barnacles-Balanus crenatus,
+"                        Br = Bryozoa-Celleporella, Parasmittina, Tricellaria                   ",
+                        Ch = Chiton-Mopalia hindsii ,
+                        Cc = Callophyllis crenulata,
+                         Cl = Callophyllis linearis,
+                        Cm = Clam ,
+                        Cs = Crustose red algae,
+                        Cr = Cryptopleura ruprechtiana,
+                        Co = Coralline algae,
+                        Cy = Cystoseira osmundacea,
+                        Do = Dodecaceria fewkesi,
+                        Em = Egregia menziesii ,
+                        Gs = Gooseneck barnacle-Pollicipes polymerus,
+                        Hf = Hymenia flabelligera,
+                        Ls = Laminaria setchellii,
+                        Mu = mussel-Mytilus califorianus,
+                        My = Myriogramme variegata,
+                        Nl = Nereocystis luetkeana,
+                        Pg = Pleurophycus gardneri,
+                        Pl = Polyneura latissima ,
+                        Pt = Pterygophora californica,
+                        Ro = rock,
+                        Rp = Rhodymenia pacifica,
+                        Sa = Saccharina sessilis,
+                        Sh = shell,
+                        Sp  = Sponge-Halichondria panicea,
+                        Ss = Slipper shell-Crepipatella lingulata,
+                        Tu = Tunicate-Aplidium californicum,
+                        U = unknown,
+                        UB =Unknown Blade,
+Name: Sub 2 (Substrate 2),VARIABLE NAME
+Description: A second substrate adhering to the holdfast,VARIABLE DESCRIPTION
+Value labels: See abbreviations above under Subst (Substrate),IF APPROPRIATE
 ,
-Name: ,Subst (Substrate)
-Description: ,The substrate adhering to the holdfast of the sporophyte.
-Value labels: ,Ba = Barnacles-Balanus crenatus
-,"Br = Bryozoa-Celleporella, Parasmittina                   "
-,Ch = Chiton-Mopalia hindsii 
-,Cs = Crustose red algae
-,Gs = Gooseneck barnacle-Pollicipes polymerus
-,Ls = Laminaria setchellii
-,Mu = mussel-Mytilus califorianus
-,My = Myriogramme variegata
-,Nl = Nereocystis luetkeana
-,Ro = rock
-,Sh = shell
-,Sp  = Sponge-Halichondria panicea
-,Ss = Slipper shell-Crepipatella lingulata
-,Tu = Tunicate-Aplidium californicum
-,U = unknown
+Name: CoSp 1 (Cospecies 1),
+Description: Other species of macroalgae(& hydroids) attached to the sporophyte holdfast,
+Value labels: Aj = Analipus japonicus ,
+                        Am = Alaria marginata,
+                        An = Antithamionella pacifica,
+                        Bo = Bossiella sp.,
+                        Cc = Callophyllis crenulata,
+                        Cf = Callophyllis fabellulata,
+                        Cl = Callophyllis linearis,
+                        Cp = Callophyllis pinnata,
+                        Co = Costaria costata,
+                        Dc = Dilsea californica,
+                        Dl = Desmarestia linglata,
+                        Em = Egregia menziesii ,
+                        Hc = Hymenena cuneifolia,
+                        Hf = Hymenena flabelligera ,
+                        Hm = Hymenena multiloba ,
+                        Hy = hydroid ,
+                        Is = Isabbottia ovalifolia ,
+                        Ll = Lessoniopsis littoralis ,
+                        Ls = Laminaria setchellii,
+                        Mp = Macrocystis pyrifera,
+                        Md = Membranoptera dimorpha,
+                        Ms = Mazzaella splendens,
+                        Ml = Mazzaella linearis,
+                        Mw = Membranoptera weeksiae,
+                        Od = Odonthalia washingtoniensis,
+                        Pc = Plocamium cartilagineum,
+                        Pd = Pterosiphonia dendroidea,
+                        Pl = Polyneura latissima ,
+                        Pp = Polysiphonia pacifica ,
+                        Pr = Prionitis lanceolata,
+                        Pt = Pterosiphonia bipinnata,
+                        Rp = Rhodymenia pacifica,
+                        Ul = Ulva lactuca         ,
 ,
-Name: ,Sub 2 (Substrate 2)
-Description: ,A second substrate adhering to the holdfast
-Value labels: ,See abbreviations above under Subst (Substrate)
+Name: CoSp 2 (Cospecies 2),
+Value labels: See abbreviations above under CoSp 1 (Cospecies 1),
 ,
-Name: ,CoSp 1 (Cospecies 1)
-Description: ,Other species of macroalgae(& hydroids) attached to the sporophyte holdfast
-Value labels: ,Aj = Analipus japonicus 
-,Am = Alaria marginata
-,Bo = Bossiella sp.
-,Cc = Callophyllis crenulata
-,Cf = Callophyllis fabellulata
-,Co = Costaria costata
-,Dc = Dilsea californica
-,Dl = Desmarestia linglata
-,Em = Egregia menziesii 
-,Hc = Hymenena cuneifolia
-,Hf = Hymenena flabelligera 
-,Hm = Hymenena multiloba 
-,Hy = hydroid 
-,Is = Isabbottia ovalifolia 
-,Ll = Lessoniopsis littoralis 
-,Ls = Laminaria setchellii
-,Md = Membranoptera dimorpha
-,Ms = Mazzaella splendens
-,Mw = Membranoptera weeksiae
-,Pl = Polyneura latissima 
-,Pp = Polysiphonia pacifica 
-,Pr = Prionitis lanceolata
-,Pt = Pterosiphonia bipinnata
-,Rp = Rhodymenia pacifica
-,Ul = Ulva lactuca         
+Name: CoSp 3 (Cospecies 3),
+Value labels: See abbreviations above under CoSp 1 (Cospecies 1),
+Name: Notes,
+"Value labels: Stipe length ranges of sporophytes in a cluster, bifurcated stipes",
+,CODE HERE
+Missing data codes,DEF HERE
+Code/symbol: none,
+"Value labels: In stipe column, none means that no kelp were found on the beach",
 ,
-Name: ,CoSp 2 (Cospecies 2)
-Value labels: ,See abbreviations above under CoSp 1 (Cospecies 1)
+Code/symbol:none,
+"Value labels: In cospecies columns, none means that there were no cospecies to be observed.",NA
+,NA
+Code/symbol : NA,
+Value labels: NA means that no measurements were taken because no kelp was present.,
 ,
-Name: ,CoSp 3 (Cospecies 3)
-Value labels: ,See abbreviations above under CoSp 1 (Cospecies 1)
+Code/symbol: nd,
+"Value labels: nd means that although data existed, it was not measured. ",NA
 ,
-Name:,Notes
-Value labels: ,"Stipe length ranges of sporophytes in a cluster, bifurcated stipes"
-,
-Missing data codes,
-Code/symbol: ,none
-Value labels: ,"In stipe column, none means that no kelp were found on the beach"
-,
-Code/symbol:,None
-Value labels: ,"In cospecies columns, none means that there were no cospecies to be observed."
-,
-Code/symbol : ,NA
-Value labels: ,NA means that no measurements were taken because no kelp was present.
-,
-Code/symbol: ,nd
-Value labels: ,"nd means that although data existed, it was not measured. "
-,
-Specialized formats of other abbreviations used:,NA
+Specialized formats of other abbreviations used:,
 ,
 <<<<<<<<<<END OF METADATA>>>>>>>>>>,
