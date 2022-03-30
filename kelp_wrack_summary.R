@@ -1,10 +1,10 @@
 ###################################################################################
 #                                                                                ##
 # kelp_wrack_summary.R                                                           ##
-# Data are current as of 2020-02-11                                              ##
+# Data are current as of 2022-03-29                                              ##
 # Data source: David Bilderback                                                  ##
 # R code prepared by Ross Whippo                                                 ##
-# Last updated 2020-02-13                                                        ##
+# Last updated 2022-03-29                                                        ##
 #                                                                                ##
 ###################################################################################
 
@@ -16,11 +16,36 @@
 # Required Files (check that script is loading latest version):
 # mature_sporophyte_data.csv
 # young_sporophyte_data.csv
+# noaa_portorford_buoydata_2018.csv
 
 # Associated Scripts:
 # none
 
 # TO DO
+
+# 1) For each of the four years, how many days was the beach transect surveyed for 
+#    young sporophytes?
+#  
+# 2) For each of the four years how many days were young sporophytes found on the 
+#    transect?
+#
+# 3) Is there a relationship between stipe length and bulb diameter?
+#
+# 4) Is there a relationship between bulb diameter and widest blade width?
+#
+# 5) What is the mean diameter of holdfasts?
+#
+# 6) For each year, how many sporophytes were singular, and how many were clusters?
+#
+# 7) What is the count and percentage of each substrate type?
+#
+# 8) How common were cospecies? Numbers and percentages.
+#
+# 9) For each year, when does recruitment occur? (as function of % of 0.1-10cm
+#    length stipes throughout the year?)
+#
+# 10) Create separate csv's of groups (0,1/clustered, not clustered)
+
 
 ###################################################################################
 # TABLE OF CONTENTS                                                               #
@@ -37,6 +62,7 @@
 ###################################################################################
 
 # 2020-02-13 Script created
+# 2022-03-29 Data updated, initial questions identified
 
 ###################################################################################
 # LOAD PACKAGES                                                                   #
@@ -67,6 +93,7 @@ mature_sporophyte <- mature_sporophyte %>%
   filter(date != "1/3/1900") 
 mature_sporophyte$date <- mature_sporophyte$date %>%
   recode("7/12/2008" = "7/12/2018")
+# turn into date format
 mature_sporophyte$date <- as.Date(mature_sporophyte$date, format = "%m/%d/%Y") 
 
 # fix bulb diameter mistake
@@ -75,24 +102,20 @@ mature_sporophyte <- mature_sporophyte %>%
                                 
 # read in young dataset
 young_sporophyte <- read_csv("Data/young_sporophyte_data.csv", 
-                                  col_types = cols(date = col_character(),
-                                                   stipe = col_number(),
-                                                   blade = col_number(), 
-                                                   bulb = col_number(), 
-                                                   date = col_date(format = "%m/%d/%Y"), 
-                                                   group = col_character(), 
-                                                   ho_fa = col_number(), 
-                                                   single = col_character()))
+                                  col_types = cols(Date = col_character(), 
+                                                   Bulb = col_double(), 
+                                                   Blade = col_double(), 
+                                                   `Ho Fa` = col_double(), 
+                                                   Single = col_character(), 
+                                                   Group = col_character()))
 
-# remove erroneous date (need to fix)
-young_sporophyte <- young_sporophyte %>%
-  filter(date != "5/8/2013") %>%
-  filter(date != "8/20/2013")
-young_sporophyte$date <- young_sporophyte$date %>%
+# fix erroneous date
+young_sporophyte$Date <- young_sporophyte$Date %>%
   recode("11/28/2028" = "11/28/2018",
          "10/9/2028" = "10/9/2018",
-         "6/17/2028" = "6/17/2018")
-young_sporophyte$date <- as.Date(young_sporophyte$date, format = "%m/%d/%Y")
+         "6/17/2028" = "6/17/2018",
+         "56/2/2021" = "5/26/2021")
+young_sporophyte$Date <- as.Date(young_sporophyte$Date, format = "%m/%d/%Y")
 
 # import NOAA weather data
 noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
@@ -235,7 +258,25 @@ ggplot(mature_sporophyte, aes(x = stipe_length, y = bulb_diam)) +
   geom_smooth(method='gam', formula = y ~ s(log(x)))
 
 
-  ############### SUBSECTION HERE
+  ############### NEW VIZUALIZTIONS 2022-03-29
+
+# 1) For each of the four years, how many days was the beach transect surveyed for 
+#    young sporophytes?
+
+young_sporophyte_q1 <- young_sporophyte %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  select(year, "month-day") %>%
+  group_by(year) %>%
+  summarise(days = length(unique(`month-day`)))
+
+ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
+  geom_col() +
+  theme_minimal() +
+  labs(y = "Number of Days", x = "Year")
+
+
+# options(max.print = 9999)
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
