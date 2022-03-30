@@ -71,6 +71,9 @@
 library(tidyverse)
 library(viridis)
 library(lme4)
+library(lubridate)
+
+# options(max.print = 9999)
 
 
 ###################################################################################
@@ -115,7 +118,10 @@ young_sporophyte$Date <- young_sporophyte$Date %>%
          "10/9/2028" = "10/9/2018",
          "6/17/2028" = "6/17/2018",
          "56/2/2021" = "5/26/2021")
-young_sporophyte$Date <- as.Date(young_sporophyte$Date, format = "%m/%d/%Y")
+young_sporophyte$Date <- mdy(young_sporophyte$Date)
+# fix capitalization of missing values
+young_sporophyte$Stipe <- young_sporophyte$Stipe %>%
+  recode("None" = "none")
 
 # import NOAA weather data
 noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
@@ -273,10 +279,23 @@ young_sporophyte_q1 <- young_sporophyte %>%
 ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
   geom_col() +
   theme_minimal() +
-  labs(y = "Number of Days", x = "Year")
+  labs(y = "Number of Days", x = "Year") +
+  geom_text(aes(label = days), vjust = -0.5)
 
+# 2) For each of the four years how many days were young sporophytes found on the 
+#    transect?
 
-# options(max.print = 9999)
+young_sporophyte_q2 <- young_sporophyte  %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  filter(Stipe == "none") %>%
+  select(year, "month-day") %>%
+  group_by(year) %>%
+  summarise(days = length(unique(`month-day`))) %>%
+  full_join(young_sporophyte_q1, by = "year") %>%
+  mutate(sporophytes_found = days.y - days.x)
+  
+
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
