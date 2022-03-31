@@ -46,6 +46,22 @@
 #
 # 10) Create separate csv's of groups (0,1/clustered, not clustered)
 
+# TO DO
+# pull out northerly winds (they are south of the bed)
+# use WSPD instead of GST
+# summarise macro-epiphytes
+# 180cm stipe length cutoff for epiphyte cover (what is actual cutoff for epibionts?)
+# when do epibionts first appear after winter?
+# size structure of sporopytes with unique epibiont communities?
+# reliable way to age kelp?
+# chamical or physical blocks to epibionts?
+# temp treatments on kelp growth? SJI?
+# don't differentiate epibiont TYPE, just PRESENCE/ABSENCE, related to stipe length
+# color change of kelp has FA change?
+# add epiphyte status to stipe_length by date figure
+# power analysis - how much do you need to collect to get same answers? Stratified?
+# subset these data sets and find minimum needed
+# how can this be published???? 
 
 ###################################################################################
 # TABLE OF CONTENTS                                                               #
