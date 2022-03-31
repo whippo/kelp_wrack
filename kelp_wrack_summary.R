@@ -122,7 +122,8 @@ mature_sporophyte <- mature_sporophyte %>%
 # read in young dataset
 young_sporophyte <- read_csv("Data/young_sporophyte_data.csv", 
                                   col_types = cols(Date = col_character(), 
-                                                   Bulb = col_double(), 
+                                                   Stipe = col_number(),
+                                                   Bulb = col_number(), 
                                                    Blade = col_double(), 
                                                    `Ho Fa` = col_double(), 
                                                    Single = col_character(), 
@@ -135,9 +136,10 @@ young_sporophyte$Date <- young_sporophyte$Date %>%
          "6/17/2028" = "6/17/2018",
          "56/2/2021" = "5/26/2021")
 young_sporophyte$Date <- mdy(young_sporophyte$Date)
-# fix capitalization of missing values
-young_sporophyte$Stipe <- young_sporophyte$Stipe %>%
-  recode("None" = "none")
+# fix bulb diameter and blade width typos
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 53.0] <- 5.3
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 30.0] <- 3.0
+young_sporophyte['Blade'][young_sporophyte['Blade'] == 22.0] <- 2.2
 
 # import NOAA weather data
 noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
@@ -295,8 +297,9 @@ young_sporophyte_q1 <- young_sporophyte %>%
 ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
   geom_col() +
   theme_minimal() +
-  labs(y = "Number of Days", x = "Year") +
-  geom_text(aes(label = days), vjust = -0.5)
+  labs(y = "Number of Days", x = "Year", title = "Number of days that transects were performed per year") +
+  geom_text(aes(label = days), vjust = -0.5) +
+  labs(title = "Number of days that transects were performed per year")
 
 # 2) For each of the four years how many days were young sporophytes found on the 
 #    transect?
@@ -310,6 +313,97 @@ young_sporophyte_q2 <- young_sporophyte  %>%
   summarise(days = length(unique(`month-day`))) %>%
   full_join(young_sporophyte_q1, by = "year") %>%
   mutate(sporophytes_found = days.y - days.x)
+
+ggplot(young_sporophyte_q2, aes(x = year, y = sporophytes_found)) +
+  geom_col() +
+  theme_minimal() +
+  labs(y = "Number of Days", x = "Year", title = "Number of days that young sporophytes were found") +
+  geom_text(aes(label = sporophytes_found), vjust = -0.5)
+  
+# 3) Is there a relationship between stipe length and bulb diameter?
+#
+
+# NEED TO TEST BETTER MODEL -> LOG? SATURATING?
+
+
+fit1 <- lm(Bulb ~ Stipe, data = young_sporophyte)
+fit2 <- lm(Bulb~poly(Stipe,2,raw=TRUE), data=young_sporophyte)
+fit3 <- lm(Bulb~poly(Stipe,3,raw=TRUE), data=young_sporophyte)
+fit4 <- lm(Bulb~poly(Stipe,4,raw=TRUE), data=young_sporophyte)
+fit5 <- lm(Bulb~poly(Stipe,5,raw=TRUE), data=young_sporophyte)
+
+summary(fit1)$adj.r.squared
+summary(fit2)$adj.r.squared
+summary(fit3)$adj.r.squared
+summary(fit4)$adj.r.squared
+summary(fit5)$adj.r.squared
+
+AIC(fit1, fit2, fit3, fit4, fit5)
+
+summary(fit1)
+
+ggplot(young_sporophyte, aes(x = Stipe, y = Bulb, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(y = "Bulb diameter (cm)", x = "Stipe length (cm)", title = "Relationship between stipe length and bulb diameter (young sporophytes)") + 
+  annotate("text", x = 150, y=9, label = "Adj. R-squared = 0.62, p < 0.0001")
+
+
+# 4) Is there a relationship between bulb diameter and widest blade width?
+#
+
+fit1 <- lm(Bulb ~ Blade, data = young_sporophyte)
+fit2 <- lm(Bulb~poly(Blade,2,raw=TRUE), data=young_sporophyte)
+fit3 <- lm(Bulb~poly(Blade,3,raw=TRUE), data=young_sporophyte)
+fit4 <- lm(Bulb~poly(Blade,4,raw=TRUE), data=young_sporophyte)
+fit5 <- lm(Bulb~poly(Blade,5,raw=TRUE), data=young_sporophyte)
+
+summary(fit1)$adj.r.squared
+summary(fit2)$adj.r.squared
+summary(fit3)$adj.r.squared
+summary(fit4)$adj.r.squared
+summary(fit5)$adj.r.squared
+
+AIC(fit1, fit2, fit3, fit4, fit5)
+
+summary(fit1)
+
+ggplot(young_sporophyte, aes(x = Blade, y = Bulb, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(y = "Bulb diameter (cm)", x = "Blade width (cm)", title = "Relationship between blade width and bulb diameter (young sporophytes)") + 
+  annotate("text", x = 6, y=12, label = "Adj. R-squared = 0.16, p < 0.0001")
+
+
+# 5) What is the mean diameter of holdfasts?
+#
+
+mean(young_sporophyte$Blade, na.rm = TRUE)
+range(young_sporophyte$Blade, na.rm = TRUE)
+median(young_sporophyte$Blade, na.rm = TRUE)
+
+ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(y = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
+  annotate("text", x = 0.2, y = 11, label = "mean = 2.18; median = 2.1; range = 0.5 - 7.0")
+
+# 6) For each year, how many sporophytes were singular, and how many were clusters?
+#
+
+young_sporophyte_q3 <- young_sporophyte %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  filter(Single %in% c("1", "0")) %>%
+  mutate(Single = case_when(
+      Single == "1" ~ "single",
+      Single == "0" ~ "multiple")) %>%
+  group_by(year)
+
+ggplot(young_sporophyte_q3, aes(x = year)) +
+  geom_bar(aes(fill=Single), width = 0.5)  
   
 
 
