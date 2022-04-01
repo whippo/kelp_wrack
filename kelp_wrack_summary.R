@@ -166,21 +166,52 @@ young_sporophyte$Subst <- young_sporophyte$Subst %>%
 # 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA
 # 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA
 
+# fix CoSp1 typos
+young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
+  recode("LS" = "Ls",
+         "Br" = "Bo",
+         "Po" = "Pp",
+         "Rc" = "Rp",
+         "Cor" = "Co",
+         "Py" = "Pt",
+         "U" = "Ul",
+         "Io" = "Is",
+         "Tu" = "none",
+         "ls" = "Ls",
+         "Ba" = "Bo",
+         "By" = "Bo",
+         "Cs" = "Cc")
+         
+# need to check these Subst code corrections: 
+# ALL Br, Po, Rc, Py
+# 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA
+# 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA
+         
 
 # substrate type dataset
 substrateData <- read_csv("Data/substrateCodes.csv")
 
-# split columns
+# split columns add none value
 substrate <- substrateData %>%
-  separate(`Subst=Substrate`, into = c("Subst", "Substrate"), sep = "=")
-# add none value
-substrate <- substrate %>%
+  separate(`Subst=Substrate`, into = c("Subst", "Substrate"), sep = "=") %>%
   bind_rows(c(Subst = "none", Substrate = "none"))
+
+
+# cospecies dataset
+cospeciesData <- read_csv("Data/cospeciesCodes.csv")
+
+# split columns add none and duplicate columns
+cospecies <- cospeciesData %>%
+  separate(`Cosp = Cospecies`, into = c("Cosp", "Cospecies"), sep =  " = ") %>%
+  bind_rows(c(Cosp = "none", Cospecies = "none")) %>%
+  mutate(CoSp1 = Cosp,
+         CoSp2 = Cosp,
+         CoSp3 = Cosp)
 
 
 
 # import NOAA weather data
-noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
+noaa_portorford_buoydata_2018 <- read_tsv("Data/noaa_portorford_buoydata_2018.csv", 
                                              col_types = cols(ATMP = col_number(), 
                                                               GST = col_number(), 
                                                               PRES = col_number(), 
@@ -429,7 +460,7 @@ ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
 # 6) For each year, how many sporophytes were singular, and how many were clusters?
 #
 
-# NEED TO EXTRACT ACTUAL VALUES
+# NEED TO ADD ACTUAL VALUES TO PLOT
 
 young_sporophyte_q3 <- young_sporophyte %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
@@ -466,18 +497,100 @@ young_sporophyte_q4 <- young_sporophyte %>%
 substrate_totals <- young_sporophyte_q4 %>%
   group_by(Substrate) %>%
   summarise('total' = length(Substrate)) %>%
-  arrange(desc(total))
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
 
 ggplot(young_sporophyte_q4 %>%
          group_by(Substrate) %>%
          summarise(count = length(Substrate)) %>%
          filter(count > 20) %>%
-         arrange(desc(count)), aes(fct_reorder(Substrate, count), count, fill = Substrate)) +
+         arrange(desc(count)), aes(fct_reorder(Substrate, count), count)) +
   geom_col() +
   theme_minimal() +
-  scale_fill_viridis(discrete = TRUE, option = "A") +
   labs(x = "Substrate type", "Number of occurrences") +
   coord_flip()
+
+# 8) How common were cospecies? Numbers and percentages.
+#
+
+# primary
+
+CoSp1_data <- cospecies %>%
+  select(CoSp1, Cospecies)
+
+young_sporophyte_q8 <- young_sporophyte %>%
+  mutate(CoSp1 = na_if(CoSp1, "nd")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "N A")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "Na")) %>%
+  filter(!is.na(CoSp1)) %>%
+  left_join(CoSp1_data, by = "CoSp1")
+
+CoSp1_totals <- young_sporophyte_q8 %>%
+  group_by(Cospecies) %>%
+  summarise('total' = length(Cospecies)) %>%
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
+
+ggplot(young_sporophyte_q8 %>%
+         group_by(Cospecies) %>%
+         summarise(count = length(Cospecies)) %>%
+         filter(count > 100) %>%
+         arrange(desc(count)), aes(fct_reorder(Cospecies, count), count)) +
+  geom_col() +
+  theme_minimal() +
+  labs(x = "Primary cospecies", "Number of occurrences") +
+  coord_flip()
+
+# percent with multiples
+
+young_sporophyte_q8_1 <- young_sporophyte %>%
+  mutate(CoSp1 = na_if(CoSp1, "nd")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "N A")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "Na")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "nd")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "N A")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "Na")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "nd")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "N A")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "Na")) %>%
+  mutate(CoSp1 = ifelse(CoSp1 == "none", "0", "1")) %>%
+  mutate(CoSp2 = ifelse(CoSp2 == "none", "0", "1")) %>%  
+  mutate(CoSp3 = ifelse(CoSp3 == "none", "0", "1")) %>%
+  mutate_at(c("CoSp1", "CoSp2", "CoSp3"), as.numeric) %>%
+  mutate(Total_cospecies = CoSp1 + CoSp2 + CoSp3) %>%
+  filter(!is.na(Total_cospecies))
+
+cospecies_totals <- young_sporophyte_q8_1 %>%
+  group_by(Total_cospecies) %>%
+  summarise('total' = length(Total_cospecies)) %>%
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
+
+ggplot(cospecies_totals, aes(x = Total_cospecies, y = total)) +
+  geom_col() +
+  theme_minimal() +
+  labs(x = "Total number of cospecies", y = "Frequency of occurrence")  +
+  geom_text(aes(label = total), vjust = -0.5)
+
+# 9) For each year, when does recruitment occur? (as function of % of 0.1-10cm
+#    length stipes throughout the year?)
+
+# HOW LONG TILL STIPES REACH 10CM FROM SETTLEMENT?
+
+young_sporophyte_q9 <- young_sporophyte %>%
+  complete(Date = seq.Date(as.Date("2018-01-01"), as.Date("2021-12-31"), by="day")) %>%
+  separate(Date, c("year", "month", "day"), sep = "-", remove = FALSE) %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  mutate(Stipe = ifelse(is.na(Stipe), 0.5, Stipe)) %>%
+  filter(Stipe < 10.1)
+
+ggplot(young_sporophyte_q9, aes(x = Date, y = Stipe)) +
+  geom_col() +
+  theme_minimal() +
+  labs(x = "Date", y = "Count of stipes < 10.1 cm") +
+  scale_x_date(breaks = "1 month", labels = date_format("%b")) +
+  facet_wrap(~year, nrow = 4, scales = "free_x")
+
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
