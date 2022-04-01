@@ -468,11 +468,16 @@ substrate_totals <- young_sporophyte_q4 %>%
   summarise('total' = length(Substrate)) %>%
   arrange(desc(total))
 
-ggplot(young_sporophyte_q4, aes(x = Substrate)) +
-  geom_bar(aes(fill = Substrate)) +
+ggplot(young_sporophyte_q4 %>%
+         group_by(Substrate) %>%
+         summarise(count = length(Substrate)) %>%
+         filter(count > 20) %>%
+         arrange(desc(count)), aes(fct_reorder(Substrate, count), count, fill = Substrate)) +
+  geom_col() +
   theme_minimal() +
   scale_fill_viridis(discrete = TRUE, option = "A") +
-  labs(x = "Substrate type", "Number of occurrences")
+  labs(x = "Substrate type", "Number of occurrences") +
+  coord_flip()
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
