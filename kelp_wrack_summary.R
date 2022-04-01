@@ -10,7 +10,7 @@
 
 # SUMMARY:
 # Data on kelp wrack morphometrics collected by David Bilderback in Bandon, OR, USA
-# from 2018 - present. 
+# from 2018 - 2022 
 
 
 # Required Files (check that script is loading latest version):
@@ -118,6 +118,7 @@ mature_sporophyte$date <- as.Date(mature_sporophyte$date, format = "%m/%d/%Y")
 # fix bulb diameter mistake
 mature_sporophyte <- mature_sporophyte %>% 
   mutate(bulb_diam = replace(bulb_diam, bulb_diam == 72, 7.2))
+
                                 
 # read in young dataset
 young_sporophyte <- read_csv("Data/young_sporophyte_data.csv", 
@@ -307,18 +308,16 @@ ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
 young_sporophyte_q2 <- young_sporophyte  %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
   unite("month-day", month:day, remove = FALSE) %>% 
-  filter(Stipe == "none") %>%
+  filter(!is.na(Stipe)) %>%
   select(year, "month-day") %>%
   group_by(year) %>%
-  summarise(days = length(unique(`month-day`))) %>%
-  full_join(young_sporophyte_q1, by = "year") %>%
-  mutate(sporophytes_found = days.y - days.x)
+  summarise(days = length(unique(`month-day`)))
 
-ggplot(young_sporophyte_q2, aes(x = year, y = sporophytes_found)) +
+ggplot(young_sporophyte_q2, aes(x = year, y = days)) +
   geom_col() +
   theme_minimal() +
   labs(y = "Number of Days", x = "Year", title = "Number of days that young sporophytes were found") +
-  geom_text(aes(label = sporophytes_found), vjust = -0.5)
+  geom_text(aes(label = days), vjust = -0.5)
   
 # 3) Is there a relationship between stipe length and bulb diameter?
 #
@@ -393,6 +392,8 @@ ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
 # 6) For each year, how many sporophytes were singular, and how many were clusters?
 #
 
+# NEED TO EXTRACT ACTUAL VALUES
+
 young_sporophyte_q3 <- young_sporophyte %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
   unite("month-day", month:day, remove = FALSE) %>% 
@@ -402,9 +403,18 @@ young_sporophyte_q3 <- young_sporophyte %>%
       Single == "0" ~ "multiple")) %>%
   group_by(year)
 
-ggplot(young_sporophyte_q3, aes(x = year)) +
-  geom_bar(aes(fill=Single), width = 0.5)  
+ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
+  geom_bar(aes(fill=Single)) +
+  theme_minimal() +
+  scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.3, end = 0.7) +
+  labs(fill = "Sporophyte grouping", x = "Year", y = "Number of individuals")  
   
+
+# 7) What is the count and percentage of each substrate type?
+#
+
+young_sporophyte_q4 <- young_sporophyte %>%
+  mutate(Subst = na_if(Subst, "nd"))
 
 
 #####
