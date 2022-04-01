@@ -186,7 +186,16 @@ young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
 # ALL Br, Po, Rc, Py
 # 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA
 # 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA
-         
+     
+# subset and write single and grouped individuals
+clustered <- young_sporophyte %>%
+  filter(Single == 0) 
+# write_csv(clustered, "Data/clustered_young_sporophytes.csv")
+singles <- young_sporophyte %>%
+  filter(Single == 1)
+# write_csv(singles, "Data/single_young_sporophytes.csv")    
+
+
 
 # substrate type dataset
 substrateData <- read_csv("Data/substrateCodes.csv")
@@ -195,6 +204,7 @@ substrateData <- read_csv("Data/substrateCodes.csv")
 substrate <- substrateData %>%
   separate(`Subst=Substrate`, into = c("Subst", "Substrate"), sep = "=") %>%
   bind_rows(c(Subst = "none", Substrate = "none"))
+
 
 
 # cospecies dataset
@@ -576,6 +586,8 @@ ggplot(cospecies_totals, aes(x = Total_cospecies, y = total)) +
 #    length stipes throughout the year?)
 
 # HOW LONG TILL STIPES REACH 10CM FROM SETTLEMENT?
+
+# THIS IS SUPER SEXY AND POTENTIAL THE CRUX OF THIS DATASET
 
 young_sporophyte_q9 <- young_sporophyte %>%
   complete(Date = seq.Date(as.Date("2018-01-01"), as.Date("2021-12-31"), by="day")) %>%

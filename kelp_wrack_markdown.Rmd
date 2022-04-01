@@ -1,0 +1,322 @@
+---
+title: "Kelp Wrack Metrics"
+subtitle: "Data collected from Bandon Beach from 2018-2021"
+author: 
+- David Bilderback, Oregon Institute of Marine Biology
+- Ross Whippo, Oregon Institute of Marine Biology
+date: 'Created: 2022-04-01  ; (Updated: `r Sys.Date()`)'
+output:
+  html_document: 
+    code_folding: hide
+    df_print: kable
+    fig_caption: yes
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_depth: 4
+    toc_float: true
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+  word_document:
+    toc: yes
+    toc_depth: '4'
+---
+
+<style>
+.column-left{
+  float: left;
+  width:48%;
+  text-align: left;
+}
+
+
+.column-right{
+  float: right;
+  width: 48%;
+  text-align: left;
+}
+
+.column-All{
+  float: left;
+  width:100%;
+  text-align: left;
+}
+</style>
+
+
+```{r setup, include=FALSE}
+
+## Start with tidyverse library, and some default chunk options
+
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = 'center')
+
+
+```
+
+***
+
+# Introduction
+
+GOES HERE.
+
+
+# Methods
+
+
+## Field Surveys
+
+GOES HERE.
+
+
+## Data Analysis
+
+GOES HERE.
+
+
+# Results
+
+```{r, echo = FALSE}
+
+## Load Libraries
+
+library(tidyverse)
+library(viridis)
+library(lme4)
+library(lubridate)
+
+# set plot theme
+theme_set(theme_minimal())
+
+# set pathname for all figures and tables (THIS MUST BE CHANGED EACH TIME IT IS USED IN A NEW DIRECTORY)
+figpath <- "~/Git/kelp_wrack/Figures"
+tabpath <- "~/Git/kelp_wrack/Tables"
+
+```
+
+```{r}
+
+# Import all data and manage for analyses/visualizations
+
+# read in young dataset
+young_sporophyte <- read_csv("Data/young_sporophyte_data.csv", 
+                                  col_types = cols(Date = col_character(), 
+                                                   Stipe = col_number(),
+                                                   Bulb = col_number(), 
+                                                   Blade = col_double(), 
+                                                   `Ho Fa` = col_double(), 
+                                                   Single = col_character(), 
+                                                   Group = col_character()))
+
+# fix erroneous date
+young_sporophyte$Date <- young_sporophyte$Date %>%
+  recode("11/28/2028" = "11/28/2018",
+         "10/9/2028" = "10/9/2018",
+         "6/17/2028" = "6/17/2018",
+         "56/2/2021" = "5/26/2021")
+young_sporophyte$Date <- mdy(young_sporophyte$Date)
+# fix bulb diameter and blade width typos
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 53.0] <- 5.3
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 30.0] <- 3.0
+young_sporophyte['Blade'][young_sporophyte['Blade'] == 22.0] <- 2.2
+# fix substrate typos
+young_sporophyte$Subst <- young_sporophyte$Subst %>%
+  recode("NL" = "Nl",
+         "Ni" = "Nl",
+         "MY" = "My",
+         "R" = "Ro",
+         "B" = "Ba",
+         "Bs" = "Ba",
+         "Bo" = "Ba",
+         "Bl" = "Ba",
+         "Cf" = "Cr",
+         "LS" = "Ls",
+         "SS" = "Ss",
+         "Hy" = "Hf",
+         "Mp" = "Mu",
+         "Dl" = "Do")
+
+# need to check these Subst code corrections: 
+# 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA
+# 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA
+# 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110
+# 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA
+# 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA
+# 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA
+
+# fix CoSp1 typos
+young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
+  recode("LS" = "Ls",
+         "Br" = "Bo",
+         "Po" = "Pp",
+         "Rc" = "Rp",
+         "Cor" = "Co",
+         "Py" = "Pt",
+         "U" = "Ul",
+         "Io" = "Is",
+         "Tu" = "none",
+         "ls" = "Ls",
+         "Ba" = "Bo",
+         "By" = "Bo",
+         "Cs" = "Cc")
+         
+# need to check these Subst code corrections: 
+# ALL Br, Po, Rc, Py
+# 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA
+# 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA
+
+# substrate type dataset
+substrateData <- read_csv("Data/substrateCodes.csv")
+
+# split columns add none value
+substrate <- substrateData %>%
+  separate(`Subst=Substrate`, into = c("Subst", "Substrate"), sep = "=") %>%
+  bind_rows(c(Subst = "none", Substrate = "none"))
+
+
+
+# cospecies dataset
+cospeciesData <- read_csv("Data/cospeciesCodes.csv")
+
+# split columns add none and duplicate columns
+cospecies <- cospeciesData %>%
+  separate(`Cosp = Cospecies`, into = c("Cosp", "Cospecies"), sep =  " = ") %>%
+  bind_rows(c(Cosp = "none", Cospecies = "none")) %>%
+  mutate(CoSp1 = Cosp,
+         CoSp2 = Cosp,
+         CoSp3 = Cosp)
+
+
+```
+
+
+## For each of the four years, how many days was the beach transect surveyed for young sporophytes?
+
+```{r}
+
+young_sporophyte_q1 <- young_sporophyte %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  select(year, "month-day") %>%
+  group_by(year) %>%
+  summarise(days = length(unique(`month-day`)))
+
+ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
+  geom_col() +
+  theme_minimal() +
+  labs(y = "Number of Days", x = "Year", title = "Number of days that transects were performed per year") +
+  geom_text(aes(label = days), vjust = -0.5) +
+  labs(title = "Number of days that transects were performed per year")
+
+```
+
+## For each of the four years how many days were young sporophytes found on the transect?
+
+```{r}
+
+young_sporophyte_q2 <- young_sporophyte  %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  filter(!is.na(Stipe)) %>%
+  select(year, "month-day") %>%
+  group_by(year) %>%
+  summarise(days = length(unique(`month-day`)))
+
+ggplot(young_sporophyte_q2, aes(x = year, y = days)) +
+  geom_col() +
+  theme_minimal() +
+  labs(y = "Number of Days", x = "Year", title = "Number of days that young sporophytes were found") +
+  geom_text(aes(label = days), vjust = -0.5)
+
+```
+
+## Is there a relationship between stipe length and bulb diameter?
+
+```{r}
+
+fit1 <- lm(Bulb ~ Stipe, data = young_sporophyte)
+fit2 <- lm(Bulb~poly(Stipe,2,raw=TRUE), data=young_sporophyte)
+fit3 <- lm(Bulb~poly(Stipe,3,raw=TRUE), data=young_sporophyte)
+fit4 <- lm(Bulb~poly(Stipe,4,raw=TRUE), data=young_sporophyte)
+fit5 <- lm(Bulb~poly(Stipe,5,raw=TRUE), data=young_sporophyte)
+
+AIC(fit1, fit2, fit3, fit4, fit5)
+
+summary(fit1)
+
+ggplot(young_sporophyte, aes(x = Stipe, y = Bulb, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(y = "Bulb diameter (cm)", x = "Stipe length (cm)", title = "Relationship between stipe length and bulb diameter (young sporophytes)") + 
+  annotate("text", x = 150, y=9, label = "Adj. R-squared = 0.62, p < 0.0001")
+
+```
+
+## Is there a relationship between bulb diameter and widest blade width?
+
+```{r}
+
+fit1 <- lm(Bulb ~ Blade, data = young_sporophyte)
+fit2 <- lm(Bulb~poly(Blade,2,raw=TRUE), data=young_sporophyte)
+fit3 <- lm(Bulb~poly(Blade,3,raw=TRUE), data=young_sporophyte)
+fit4 <- lm(Bulb~poly(Blade,4,raw=TRUE), data=young_sporophyte)
+fit5 <- lm(Bulb~poly(Blade,5,raw=TRUE), data=young_sporophyte)
+
+AIC(fit1, fit2, fit3, fit4, fit5)
+
+summary(fit1)
+
+ggplot(young_sporophyte, aes(x = Blade, y = Bulb, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(y = "Bulb diameter (cm)", x = "Blade width (cm)", title = "Relationship between blade width and bulb diameter (young sporophytes)") + 
+  annotate("text", x = 6, y=12, label = "Adj. R-squared = 0.16, p < 0.0001")
+
+```
+
+## What is the mean diameter of holdfasts?
+
+```{r}
+
+ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(y = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
+  annotate("text", x = 0.2, y = 11, label = "mean = 2.18; median = 2.1; range = 0.5 - 7.0")
+
+```
+
+## For each year, how many sporophytes were singular, and how many were clusters?
+
+```{r}
+
+young_sporophyte_q3 <- young_sporophyte %>%
+  separate(Date, c("year", "month", "day"), sep = "-") %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  filter(Single %in% c("1", "0")) %>%
+  mutate(Single = case_when(
+      Single == "1" ~ "single",
+      Single == "0" ~ "multiple")) %>%
+  group_by(year)
+
+young_sporophyte_q3 %>%
+  group_by(year, Single) %>%
+  summarise(length(year))
+
+ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
+  geom_bar(aes(fill = Single)) +
+  theme_minimal() +
+  scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.3, end = 0.7) +
+  labs(fill = "Sporophyte grouping", x = "Year", y = "Number of individuals")  
+
+```
+
+# References
+
+<!-- END OF SCRIPT -->
