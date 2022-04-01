@@ -89,7 +89,7 @@ library(viridis)
 library(lme4)
 library(lubridate)
 
-# options(max.print = 9999)
+options(max.print = 9999)
 
 
 ###################################################################################
@@ -141,6 +141,43 @@ young_sporophyte$Date <- mdy(young_sporophyte$Date)
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 53.0] <- 5.3
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 30.0] <- 3.0
 young_sporophyte['Blade'][young_sporophyte['Blade'] == 22.0] <- 2.2
+# fix substrate typos
+young_sporophyte$Subst <- young_sporophyte$Subst %>%
+  recode("NL" = "Nl",
+         "Ni" = "Nl",
+         "MY" = "My",
+         "R" = "Ro",
+         "B" = "Ba",
+         "Bs" = "Ba",
+         "Bo" = "Ba",
+         "Bl" = "Ba",
+         "Cf" = "Cr",
+         "LS" = "Ls",
+         "SS" = "Ss",
+         "Hy" = "Hf",
+         "Mp" = "Mu",
+         "Dl" = "Do")
+
+# need to check these Subst code corrections: 
+# 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA
+# 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA
+# 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110
+# 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA
+# 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA
+# 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA
+
+
+# substrate type dataset
+substrateData <- read_csv("Data/substrateCodes.csv")
+
+# split columns
+substrate <- substrateData %>%
+  separate(`Subst=Substrate`, into = c("Subst", "Substrate"), sep = "=")
+# add none value
+substrate <- substrate %>%
+  bind_rows(c(Subst = "none", Substrate = "none"))
+
+
 
 # import NOAA weather data
 noaa_portorford_buoydata_2018 <- read_table("Data/noaa_portorford_buoydata_2018.csv", 
@@ -403,8 +440,12 @@ young_sporophyte_q3 <- young_sporophyte %>%
       Single == "0" ~ "multiple")) %>%
   group_by(year)
 
+young_sporophyte_q3 %>%
+  group_by(year, Single) %>%
+  summarise(length(year))
+
 ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
-  geom_bar(aes(fill=Single)) +
+  geom_bar(aes(fill = Single)) +
   theme_minimal() +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.3, end = 0.7) +
   labs(fill = "Sporophyte grouping", x = "Year", y = "Number of individuals")  
@@ -413,9 +454,25 @@ ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
 # 7) What is the count and percentage of each substrate type?
 #
 
-young_sporophyte_q4 <- young_sporophyte %>%
-  mutate(Subst = na_if(Subst, "nd"))
+# THIS COULD BE A GREAT FIGURE IF ALL OTHER DATA ADDED IN - INFOGRAPHIC STYLE
 
+young_sporophyte_q4 <- young_sporophyte %>%
+  mutate(Subst = na_if(Subst, "nd")) %>%
+  mutate(Subst = na_if(Subst, "N A")) %>%
+  mutate(Subst = na_if(Subst, "Na")) %>%
+  filter(!is.na(Subst)) %>%
+  left_join(substrate, by = "Subst")
+
+substrate_totals <- young_sporophyte_q4 %>%
+  group_by(Substrate) %>%
+  summarise('total' = length(Substrate)) %>%
+  arrange(desc(total))
+
+ggplot(young_sporophyte_q4, aes(x = Substrate)) +
+  geom_bar(aes(fill = Substrate)) +
+  theme_minimal() +
+  scale_fill_viridis(discrete = TRUE, option = "A") +
+  labs(x = "Substrate type", "Number of occurrences")
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
