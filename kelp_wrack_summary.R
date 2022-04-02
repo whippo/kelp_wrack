@@ -457,15 +457,18 @@ ggplot(young_sporophyte, aes(x = Blade, y = Bulb, na.rm = TRUE)) +
 # 5) What is the mean diameter of holdfasts?
 #
 
-mean(young_sporophyte$Blade, na.rm = TRUE)
-range(young_sporophyte$Blade, na.rm = TRUE)
-median(young_sporophyte$Blade, na.rm = TRUE)
+
+
+mean(young_sporophyte$`Ho Fa`, na.rm = TRUE)
+range(young_sporophyte$`Ho Fa`, na.rm = TRUE)
+median(young_sporophyte$`Ho Fa`, na.rm = TRUE)
+
 
 ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
   geom_boxplot() +
   theme_minimal() +
   labs(y = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
-  annotate("text", x = 0.2, y = 11, label = "mean = 2.18; median = 2.1; range = 0.5 - 7.0")
+  annotate("text", x = 0.2, y = 11, label = "mean = 3.00; median = 2.60; range = 0.3 - 12.00")
 
 # 6) For each year, how many sporophytes were singular, and how many were clusters?
 #

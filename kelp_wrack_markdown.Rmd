@@ -1,6 +1,6 @@
 ---
 title: "Kelp Wrack Metrics"
-subtitle: "Data collected from Bandon Beach from 2018-2021"
+subtitle: "Data collected at Bandon Beach from 2018-2021"
 author: 
 - David Bilderback, Oregon Institute of Marine Biology
 - Ross Whippo, Oregon Institute of Marine Biology
@@ -60,18 +60,37 @@ knitr::opts_chunk$set(echo = TRUE,
 
 ***
 
-# Introduction
+# Summary
 
-GOES HERE.
+Hi Dave, this is as far as I've gotten with the analysis so far and I thought you might like to take a look at it. I have a few questions about the data set itself and would appreciate feedback on the following issues:
 
+* I went through and made corrections to the data and had to make some assumptions about values that appeared to be typos. Can you look at the following entries in your data and let me know if I coded them correctly?
+    + for the Substr code column:
+        - 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA (I coded as 'Ba')
+        - 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA (I coded as 'Ba')
+        - 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110 (I coded as 'Ba')
+        - 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA (I coded as 'Cr')
+        - 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA (I coded as 'Cr')
+        - 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA (I coded as 'Mu')
+    + for the CoSp1 column:
+        - Generally, the codes: Br, Po, Rc, Py, which appeared multiple times. (I coded them as: Bo, Pp, Rp, Pt, respectively)
+        - 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA (I coded as 'Ul')
+        - 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA (I coded as 'Ul')
+
+I am also curious as to the status of the 'mature sporophyte' data set. Do you have additional entries for that as well? Would you like me to combine them into a single dataset? It's fairly easy for me to put them together, and then take apart during analysis, as-needed.
+
+Overall, this is a very impressive and exciting data set. I'm particularly interested in digging into the recruitment question that is represented in the final figure. It would be useful to generate a model that back-calculates other demographics of the local population, like spore release and settlement. Perhaps relating the sporophyll and recruitment data would be a neat way to do it (all within a single set of data, no less!). 
+
+I have other questions that came up over the course of this and previous analyses, and I will work to add more to this document. If you have any particular thoughts on what I've presented here, do let me know. I will send you updates as I progress in my analyses. 
 
 # Methods
 
 
 ## Field Surveys
 
-GOES HERE.
+Dave, can you provide me a comprehensive description of your field methods? I have what I pulled from the metadata below, but it would be great to have more detail about the specific location, the scope of the transects, what time of day they were conducted, any details you may have about how high on the tideline you looked for sporophytes, the general condition of the sporophytes (were they dessicated? fresh? both? neither? Did you treat them differently depending on their condition [beyond being 'intact']?), did you ever subset if there were too many on the beach, and any other pertinent information regarding your collections.
 
+All intact, individual young sporophytes and clusters of young sporophytes with holdfasts, stipes, bulbs and blades were collected and brought to the lab. The diameter of some holdfasts were measured to the nearest mm. Because of the elasticity of the stipe, its length was measured to the nearest 0.5 cm.  The diameter of the bulb was measured with a caliper to the nearest mm.  The width of some of the widest blades were measured to the nearest mm.
 
 ## Data Analysis
 
@@ -88,6 +107,7 @@ library(tidyverse)
 library(viridis)
 library(lme4)
 library(lubridate)
+library(scales)
 
 # set plot theme
 theme_set(theme_minimal())
@@ -288,7 +308,7 @@ ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
   geom_boxplot() +
   theme_minimal() +
   labs(y = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
-  annotate("text", x = 0.2, y = 11, label = "mean = 2.18; median = 2.1; range = 0.5 - 7.0")
+  annotate("text", x = 0.2, y = 11, label = "mean = 3.00; \n median = 2.60; \n range = 0.3 - 12.00")
 
 ```
 
@@ -313,7 +333,127 @@ ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
   geom_bar(aes(fill = Single)) +
   theme_minimal() +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.3, end = 0.7) +
-  labs(fill = "Sporophyte grouping", x = "Year", y = "Number of individuals")  
+  labs(title = "Occurence of single and multiple groupings of young sporophytes", fill = "Sporophyte grouping", x = "Year", y = "Number of individuals")  
+
+```
+
+## What is the count and percentage of each substrate type?
+
+```{r}
+
+# THIS COULD BE A GREAT FIGURE IF ALL OTHER DATA ADDED IN - INFOGRAPHIC STYLE
+
+young_sporophyte_q4 <- young_sporophyte %>%
+  mutate(Subst = na_if(Subst, "nd")) %>%
+  mutate(Subst = na_if(Subst, "N A")) %>%
+  mutate(Subst = na_if(Subst, "Na")) %>%
+  filter(!is.na(Subst)) %>%
+  left_join(substrate, by = "Subst")
+
+young_sporophyte_q4 %>%
+  group_by(Substrate) %>%
+  summarise('total' = length(Substrate)) %>%
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
+
+ggplot(young_sporophyte_q4 %>%
+         group_by(Substrate) %>%
+         summarise(count = length(Substrate)) %>%
+         filter(count > 20) %>%
+         arrange(desc(count)), aes(fct_reorder(Substrate, count), count)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "Common substrate types", x = "Substrate type", "Number of occurrences") +
+  coord_flip()
+
+```
+
+## How common were cospecies? Numbers and percentages.
+
+```{r}
+
+# primary
+
+CoSp1_data <- cospecies %>%
+  select(CoSp1, Cospecies)
+
+young_sporophyte_q8 <- young_sporophyte %>%
+  mutate(CoSp1 = na_if(CoSp1, "nd")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "N A")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "Na")) %>%
+  filter(!is.na(CoSp1)) %>%
+  left_join(CoSp1_data, by = "CoSp1")
+
+young_sporophyte_q8 %>%
+  group_by(Cospecies) %>%
+  summarise('total' = length(Cospecies)) %>%
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
+
+ggplot(young_sporophyte_q8 %>%
+         group_by(Cospecies) %>%
+         summarise(count = length(Cospecies)) %>%
+         filter(count > 100) %>%
+         arrange(desc(count)), aes(fct_reorder(Cospecies, count), count)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "Common primary cospecies", x = "Primary cospecies", "Number of occurrences") +
+  coord_flip()
+
+# percent with multiples
+
+young_sporophyte_q8_1 <- young_sporophyte %>%
+  mutate(CoSp1 = na_if(CoSp1, "nd")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "N A")) %>%
+  mutate(CoSp1 = na_if(CoSp1, "Na")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "nd")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "N A")) %>%
+  mutate(CoSp2 = na_if(CoSp2, "Na")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "nd")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "N A")) %>%
+  mutate(CoSp3 = na_if(CoSp3, "Na")) %>%
+  mutate(CoSp1 = ifelse(CoSp1 == "none", "0", "1")) %>%
+  mutate(CoSp2 = ifelse(CoSp2 == "none", "0", "1")) %>%  
+  mutate(CoSp3 = ifelse(CoSp3 == "none", "0", "1")) %>%
+  mutate_at(c("CoSp1", "CoSp2", "CoSp3"), as.numeric) %>%
+  mutate(Total_cospecies = CoSp1 + CoSp2 + CoSp3) %>%
+  filter(!is.na(Total_cospecies))
+
+cospecies_totals <- young_sporophyte_q8_1 %>%
+  group_by(Total_cospecies) %>%
+  summarise('total' = length(Total_cospecies)) %>%
+  arrange(desc(total)) %>%
+  mutate(percent = (total/sum(total))*100)
+
+ggplot(cospecies_totals, aes(x = Total_cospecies, y = total)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "Cospecies per observation", x = "Total number of cospecies", y = "Frequency of occurrence")  +
+  geom_text(aes(label = total), vjust = -0.5)
+
+```
+
+## For each year, when does recruitment occur? (as function of % of 0.1-10cm length stipes throughout the year)
+
+```{r, fig.height = 8}
+
+# HOW LONG TILL STIPES REACH 10CM FROM SETTLEMENT?
+
+# THIS IS SUPER SEXY AND POTENTIAL THE CRUX OF THIS DATASET
+
+young_sporophyte_q9 <- young_sporophyte %>%
+  complete(Date = seq.Date(as.Date("2018-01-01"), as.Date("2021-12-31"), by="day")) %>%
+  separate(Date, c("year", "month", "day"), sep = "-", remove = FALSE) %>%
+  unite("month-day", month:day, remove = FALSE) %>% 
+  mutate(Stipe = ifelse(is.na(Stipe), 0.5, Stipe)) %>%
+  filter(Stipe < 10.1)
+
+ggplot(young_sporophyte_q9, aes(x = Date, y = Stipe)) +
+  geom_col() +
+  theme_minimal() +
+  labs(title = "Number of sporophytes < 10 cm stipe length observed by day", x = "Date", y = "Count of stipes < 10.1 cm") +
+  scale_x_date(breaks = "1 month", labels = date_format("%b")) +
+  facet_wrap(~year, nrow = 4, scales = "free_x")
 
 ```
 
