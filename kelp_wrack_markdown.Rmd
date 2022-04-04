@@ -64,19 +64,6 @@ knitr::opts_chunk$set(echo = TRUE,
 
 Hi Dave, this is as far as I've gotten with the analysis so far and I thought you might like to take a look at it. I have a few questions about the data set itself and would appreciate feedback on the following issues:
 
-* I went through and made corrections to the data and had to make some assumptions about values that appeared to be typos. Can you look at the following entries in your data and let me know if I coded them correctly?
-    + for the Substr code column:
-        - 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA (I coded as 'Ba')
-        - 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA (I coded as 'Ba')
-        - 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110 (I coded as 'Ba')
-        - 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA (I coded as 'Cr')
-        - 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA (I coded as 'Cr')
-        - 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA (I coded as 'Mu')
-    + for the CoSp1 column:
-        - Generally, the codes: Br, Po, Rc, Py, which appeared multiple times. (I coded them as: Bo, Pp, Rp, Pt, respectively)
-        - 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA (I coded as 'Ul')
-        - 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA (I coded as 'Ul')
-
 I am also curious as to the status of the 'mature sporophyte' data set. Do you have additional entries for that as well? Would you like me to combine them into a single dataset? It's fairly easy for me to put them together, and then take apart during analysis, as-needed.
 
 Overall, this is a very impressive and exciting data set. I'm particularly interested in digging into the recruitment question that is represented in the final figure. It would be useful to generate a model that back-calculates other demographics of the local population, like spore release and settlement. Perhaps relating the sporophyll and recruitment data would be a neat way to do it (all within a single set of data, no less!). 
@@ -152,42 +139,24 @@ young_sporophyte$Subst <- young_sporophyte$Subst %>%
          "B" = "Ba",
          "Bs" = "Ba",
          "Bo" = "Ba",
-         "Bl" = "Ba",
-         "Cf" = "Cr",
+         "Bl" = "Nl",
          "LS" = "Ls",
          "SS" = "Ss",
          "Hy" = "Hf",
          "Mp" = "Mu",
          "Dl" = "Do")
 
-# need to check these Subst code corrections: 
-# 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA
-# 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA
-# 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110
-# 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA
-# 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA
-# 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA
 
 # fix CoSp1 typos
 young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
   recode("LS" = "Ls",
-         "Br" = "Bo",
-         "Po" = "Pp",
-         "Rc" = "Rp",
+         "Po" = "Pl",
          "Cor" = "Co",
-         "Py" = "Pt",
-         "U" = "Ul",
          "Io" = "Is",
          "Tu" = "none",
          "ls" = "Ls",
          "Ba" = "Bo",
-         "By" = "Bo",
-         "Cs" = "Cc")
-         
-# need to check these Subst code corrections: 
-# ALL Br, Po, Rc, Py
-# 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA
-# 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA
+         "By" = "Bo")
 
 # substrate type dataset
 substrateData <- read_csv("Data/substrateCodes.csv")

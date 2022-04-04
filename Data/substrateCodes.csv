@@ -1,7 +1,7 @@
 Subst=Substrate
 Am=Alaria marginata
 Ba=Barnacles-Balanus crenatus
-Br=Bryozoa-Celleporella, Parasmittina, Tricellaria
+Br=Bryozoa-Celleporella
 Ch=Chiton-Mopalia hindsii
 Cc=Callophyllis crenulata
 Cl=Callophyllis linearis
@@ -30,3 +30,4 @@ Ss=Slipper shell-Crepipatella lingulata
 Tu=Tunicate-Aplidium californicum
 U=unknown
 UB=Unknown Blade
+Cf=Callophyllis fabellulata

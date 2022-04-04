@@ -150,42 +150,26 @@ young_sporophyte$Subst <- young_sporophyte$Subst %>%
          "B" = "Ba",
          "Bs" = "Ba",
          "Bo" = "Ba",
-         "Bl" = "Ba",
-         "Cf" = "Cr",
+         "Bl" = "Nl",
          "LS" = "Ls",
          "SS" = "Ss",
          "Hy" = "Hf",
          "Mp" = "Mu",
          "Dl" = "Do")
 
-# need to check these Subst code corrections: 
-# 2021-08-14 17.0 2.3 NA 2.1 1 0 B none none none none NA
-# 2021-05-26 11.5 1.8 NA 2.4 1 0 Bo none Am none none NA
-# 2018-10-09 5.0 0.4 NA NA 0 1 Bl none none none none Cluster 5-110
-# 2021-06-12 13.4 2.3 2.0 2.7 1 0 Cf none none none none NA
-# 2021-06-12 8.2 3.9 2.5 4.4 1 0 Cf none Cf none none NA
-# 2020-04-28 22.5 3.7 1.5 NA 1 0 Mp none none none none NA
 
 # fix CoSp1 typos
 young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
   recode("LS" = "Ls",
-         "Br" = "Bo",
-         "Po" = "Pp",
-         "Rc" = "Rp",
+         "Po" = "Pl",
          "Cor" = "Co",
-         "Py" = "Pt",
-         "U" = "Ul",
          "Io" = "Is",
          "Tu" = "none",
          "ls" = "Ls",
          "Ba" = "Bo",
-         "By" = "Bo",
-         "Cs" = "Cc")
+         "By" = "Bo")
          
-# need to check these Subst code corrections: 
-# ALL Br, Po, Rc, Py
-# 2018-09-12 127.5 4.0 NA NA 1 0 U none Tu none none NA
-# 2021-06-12 24.3 3.8 2.3 3.0 1 0 U none Cs none none NA
+
      
 # subset and write single and grouped individuals
 clustered <- young_sporophyte %>%
