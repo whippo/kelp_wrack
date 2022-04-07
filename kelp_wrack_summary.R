@@ -23,28 +23,30 @@
 
 # TO DO
 
-# 1) For each of the four years, how many days was the beach transect surveyed for 
-#    young sporophytes?
-#  
-# 2) For each of the four years how many days were young sporophytes found on the 
-#    transect?
+# 3.7  Substrates: What are the substrates for just single sporophytes?  
+#    These substrates would be those for the primary recruits of Nereocystis sporophytes. 
+#    What are the substrates for just clusters (multiples) of sporophytes?   Looking at 
+#    the current data, it appears that the 2379 Nereocystis sporophytes are secondary 
+#    recruits on 625 sporophytes that are primary recruits on the stipes of Laminaria and
+#    Pterosiphonia.  Are there other substrates for primary recruitment of Nereocystis that 
+#    in turn are substrates for secondary recruitment of Nereocystis?  What is interesting 
+#    is that only extremely rarely are young Nereocystis sporophytes associated with the
+#    holdfasts of "mature" Nereocystis sporophytes.  Why isn't there recruitment onto mature 
+#    holdfasts?  Do holdfasts produce an inhibitor? 
 #
-# 3) Is there a relationship between stipe length and bulb diameter?
+# 3.8 Cospecies: I think that the cospecies have been overestimated.  The problem is that 
+#    every sporophyte in a cluster was coded as having the same cospecies.  Is it possible 
+#    to select cospecies of all clusters with all substrates except Nl?  What are the cospecies 
+#    associated with just single sporophytes?  
 #
-# 4) Is there a relationship between bulb diameter and widest blade width?
-#
-# 5) What is the mean diameter of holdfasts?
-#
-# 6) For each year, how many sporophytes were singular, and how many were clusters?
-#
-# 7) What is the count and percentage of each substrate type?
-#
-# 8) How common were cospecies? Numbers and percentages.
-#
-# 9) For each year, when does recruitment occur? (as function of % of 0.1-10cm
-#    length stipes throughout the year?)
-#
-# 10) Create separate csv's of groups (0,1/clustered, not clustered)
+# 3.9 Recruitment:  Is the data skewed? For example, in our class < 10 cm, only clusters will 
+#    have really small sporophytes with stipes less than 5.0 cm.  These small sporophytes are 
+#    too small to find on the beach as individuals.  The number of sporophytes < than 10 cm found
+#    on a particular day is dependent on the number of clusters that wash ashore on that day.  
+#    What is the shortest stipe of the single sporophytes?  What is the shortest stipe of the 
+#    cluster sporophytes?  Should we run the class < 10 cm separately for the single and
+#    cluster sporophytes?
+
 
 # TO DO
 # pull out northerly winds (they are south of the bed)
@@ -79,6 +81,7 @@
 
 # 2020-02-13 Script created
 # 2022-03-29 Data updated, initial questions identified
+# 2022-04-07 New questions added to address (above)
 
 ###################################################################################
 # LOAD PACKAGES                                                                   #
