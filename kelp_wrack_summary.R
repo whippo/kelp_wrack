@@ -325,9 +325,10 @@ ggplot(mature_sporophyte, aes(x = date, y = blade_width, color = sori_num, size 
 
 
 # young date by stipe length
-ggplot(young_sporophyte, aes(x = date, y = stipe, color = group)) +
+ggplot(young_sporophyte, aes(x = Date, y = Stipe, color = Group)) +
   geom_point() +
   scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
+
 
 # mature stipe by bladeunite(data, col, ..., sep = "_"
 ggplot(mature_sporophyte, aes(x = stipe_length, y = blade_width, color = sori_num, size = bulb_diam)) +
@@ -596,3 +597,108 @@ ggplot(young_sporophyte_q9, aes(x = Date, y = Stipe)) +
 
 #####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
+
+##### SCRATCH PAD
+
+# FIGURE for determining seasonality of recruitment events 
+
+# young date by stipe length as timeline
+ggplot(young_sporophyte, aes(x = Date, y = Stipe, color = Group)) +
+  geom_point() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
+
+# remove year so months overlap
+
+young_sporophyte_monthly <- young_sporophyte %>%
+  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", tz = "PT")) %>%
+  arrange(monthday)
+
+
+
+ggplot(young_sporophyte_monthly) +
+  geom_point(aes(x = monthday, y = Stipe, col = year)) +
+  geom_point(aes(x = monthday), stat = "count") +
+  geom_smooth(aes(x = monthday, group = 1), stat = "count", color = alpha("black", 0.3)) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,350),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", breaks = "1 month",
+               date_labels = ("%b")) +
+  theme(axis.text.x = element_text(hjust = -0.2)) +
+  facet_wrap(.~year, ncol = 1)
+
+
+
+# how many obervations on each day? All singletons removed
+datecounts <- as_tibble(table(young_sporophyte_monthly['Date'])) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(n = n - 1) %>%
+  mutate(fakedates = as.Date.POSIXct(monthday, "%Y-%M-%D"))
+  
+
+ggplot(young_sporophyte_monthly) +
+  geom_point(aes(x = monthday, y = Stipe, col = year)) +
+  geom_point(aes(x = monthday), stat = "count") +
+  geom_smooth(aes(x = monthday, group = 1), stat = "count", color = alpha("black", 0.3)) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,350),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "3 month",
+               date_labels = ("%b")) +
+  theme(axis.text.x = element_text(hjust = -0.9))
+
+
+
+datecounts %>%
+  mutate(numberdates = as.numeric(fakedates)) %>%
+  summarise(min(numberdates)) # 90 days from jan 1 - mar 31
+
+datecounts %>%
+  filter(n != 0) %>%
+  mutate(logcount = log10(n)) %>%
+  group_by(fakedates) %>%
+  summarise(meanlogcount = mean(logcount)) 
+datecounts %>%
+  filter(n > 1) %>%
+ggplot(aes(x = as.numeric(fakedates) - 18352, y = n)) +
+  geom_point() +
+  stat_smooth(method = "gam", formula = y ~ -1 + I(x^3) + x) 
+  #scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+   #            date_breaks = "1 month",
+    #           date_labels = ("%b")) +
+ # theme(axis.text.x = element_text(hjust = -0.9))
+
+datecounts %>%
+  filter(n > 0) %>%
+  ggplot(aes(x = as.numeric(fakedates) - 18352, y = n)) +
+  geom_point() +
+  xlim(0,125) +
+  ylim(0,350) +
+  stat_smooth(method = "gam", formula = y ~ -1 + I(x^2) + x) 
+
+datecounts %>%
+  filter(n > 5) %>%
+  ggplot(aes(x = as.numeric(fakedates) - 18352, y = n)) +
+  geom_point() +
+  xlim(125,260) +
+  ylim(0,350) +
+  stat_smooth(method = "gam", formula = y ~ -1 + I(x^2) + x) 
+
+
+
+ggplot(young_sporophyte_monthly, aes(x = monthday, y = Stipe, color = Group)) +
+  geom_count() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
+
+ggplot(young_sporophyte_monthly, aes(x = monthday, y = Stipe, color = Group)) +
+  geom_line() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2)
+
+
+

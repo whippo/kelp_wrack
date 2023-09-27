@@ -506,7 +506,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-06-11,26,NA,NA,NA,1,0,Ba,none,none,none,none,NA
 2018-06-11,10.5,NA,NA,NA,1,0,My,none,none,none,none,NA
 2018-06-14,27.5,NA,NA,NA,1,0,U,none,none,none,none,NA
-2018-06-14,95,NA,NA,NA,1,0,U,none,Rp,none,none,NA
+2018-06-14,95,NA,NA,NA,1,0,U,none,Rc,none,none,NA
 2018-06-14,9,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-14,13.5,NA,NA,NA,1,0,My,none,none,none,none,NA
 2018-06-14,64,NA,NA,NA,1,0,My,none,Dl,none,none,NA
@@ -533,7 +533,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-06-14,119,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-14,152,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-15,22,NA,NA,NA,1,0,My,none,none,none,none,NA
-2018-06-15,112,NA,NA,NA,1,0,My,none,Pp,none,none,NA
+2018-06-15,112,NA,NA,NA,1,0,My,none,Pl,none,none,NA
 2018-06-15,66.5,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-15,84,NA,NA,NA,1,0,My,none,none,none,none,NA
 2018-06-15,36,NA,NA,NA,1,0,U,none,none,none,none,NA
@@ -556,7 +556,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-06-16,24,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-16,12,NA,NA,NA,1,0,Ba,none,none,none,none,NA
 2018-06-16,51,NA,NA,NA,1,0,U,none,none,none,none,NA
-2018-06-16,30,NA,NA,NA,1,0,My,Ba,Pp,none,none,NA
+2018-06-16,30,NA,NA,NA,1,0,My,Ba,Pl,none,none,NA
 2018-06-16,129.6,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-17,45.5,NA,NA,NA,1,0,U,none,none,none,none,NA
 2018-06-17,157,NA,NA,NA,1,0,Ba,none,none,none,none,NA
@@ -738,7 +738,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-07-13,19,2.8,NA,NA,1,0,U,none,none,none,none,NA
 2018-07-13,41,1.9,NA,NA,1,0,U,none,none,none,none,NA
 2018-07-13,36,3.5,NA,NA,1,0,My,Ba,none,none,none,NA
-2018-07-13,45,4.1,NA,NA,1,0,My,Ba,Pp,none,none,NA
+2018-07-13,45,4.1,NA,NA,1,0,My,Ba,Pl,none,none,NA
 2018-07-13,30,1.8,NA,NA,1,0,My,none,none,none,none,NA
 2018-07-13,98,4.9,NA,NA,1,0,My,none,none,none,none,NA
 2018-07-13,90.5,4.7,NA,NA,1,0,U,none,Ms,none,none,NA
@@ -816,7 +816,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-08-15,14.5,1.7,NA,NA,1,0,Ba,none,none,none,none,NA
 2018-08-15,10.5,1.4,NA,NA,1,0,Ba,none,Dl,none,none,NA
 2018-08-15,13,1.5,NA,NA,1,0,Ba,none,none,none,none,NA
-2018-08-15,63,3.3,NA,NA,1,0,U,none,Rp,none,none,NA
+2018-08-15,63,3.3,NA,NA,1,0,U,none,Rc,none,none,NA
 2018-08-15,11,2.3,NA,NA,1,0,U,none,none,none,none,NA
 2018-08-15,27.5,2.6,NA,NA,1,0,U,none,none,none,none,NA
 2018-08-15,26,2.6,NA,NA,1,0,Ba,none,none,none,none,NA
@@ -1329,7 +1329,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2018-10-24,8.5,1.2,NA,NA,1,0,Ba,none,none,none,none,NA
 2018-10-24,8,2.5,NA,NA,1,0,Ro,none,none,none,none,NA
 2018-10-24,32.5,3.3,NA,NA,1,0,U,none,none,none,none,NA
-2018-10-24,30,2.9,NA,NA,1,0,Ro,none,Bo,none,none,Parasmittina
+2018-10-24,30,2.9,NA,NA,1,0,Ro,none,Br,none,none,Parasmittina
 2018-10-24,20,2,NA,NA,1,0,U,none,none,none,none,NA
 2018-10-24,24,2.3,NA,NA,1,0,Ro,none,none,none,none,NA
 2018-10-24,7,1.6,NA,NA,1,0,U,none,none,none,none,NA
@@ -1929,7 +1929,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2020-04-23,9.7,2.8,4.3,NA,1,0,U,none,Hf,none,none,NA
 2020-04-23,15.5,2.5,NA,2,1,0,My,none,none,none,none,NA
 2020-04-23,10,1.6,NA,2.5,1,0,Ls,none,Ls,none,none,NA
-2020-04-23,14.1,2.4,2.8,3.1,1,0,U,none,Ul,none,none,NA
+2020-04-23,14.1,2.4,2.8,3.1,1,0,U,none,U,none,none,NA
 2020-04-23,11.6,2.3,2.2,NA,1,0,Ls,none,Ls,none,none,NA
 2020-04-23,12.8,2.7,3.2,3.5,1,0,My,none,none,none,none,NA
 2020-04-23,9.3,1.5,1.5,2.5,1,0,Ls,none,none,none,none,NA
@@ -2147,7 +2147,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2020-05-02,92.5,5.9,2.8,NA,1,0,Ba,none,none,none,none,"Cy towards base, 53cm from holdfast"
 2020-05-02,123,6.5,2.6,NA,1,0,Ls,none,Ls,Cp,C.c,"On Ls blade, Cy on Ls stipe"
 2020-05-02,47.7,4.4,2.1,NA,1,0,Ba,none,none,none,none,NA
-2020-05-02,100.2,5.4,2.7,NA,1,0,Ls,none,Pt,Cc,Hy,NA
+2020-05-02,100.2,5.4,2.7,NA,1,0,Ls,none,Py,Cc,Hy,NA
 2020-05-02,110,4.6,2.4,NA,1,0,U,none,none,none,none,A few Cy near base of stipe
 2020-05-02,161,5.4,5.2,3,1,0,U,none,none,none,none,Cy along stipe
 2020-05-02,117.2,5.4,2.8,7.5,1,0,My,none,none,none,none,Cy towards the base
@@ -2185,13 +2185,13 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2020-05-12,112.5,4.5,2.9,4.7,1,0,U,none,Cc,none,none,spiky bumps on stipe
 2020-05-12,160,5.9,2.8,NA,1,0,U,none,none,none,none,spiky bumps on stipe
 2020-05-12,60.5,4.8,2.6,NA,1,0,U,none,none,none,none,spiky bumps on stipe
-2020-05-12,11.6,NA,NA,1.5,1,1,U,none,Ul,none,none,NA
+2020-05-12,11.6,NA,NA,1.5,1,1,U,none,U,none,none,NA
 2020-05-12,10.5,1.8,1.8,NA,1,1,Ls,none,Ls,Dl,Cc,NA
 2020-05-12,43.5,2.5,2.5,NA,1,1,Cc,none,Ls,none,none,NA
-2020-05-12,9.1,1.5,2.3,1.9,1,1,U,none,Ul,Cf,none,NA
+2020-05-12,9.1,1.5,2.3,1.9,1,1,U,none,U,Cf,none,NA
 2020-05-12,8.8,1.7,1.3,2.4,1,1,Ls,none,Ls,Hy,none,NA
 2020-05-12,15,2.6,2.8,2.5,1,1,Ba,none,Bo,none,none,NA
-2020-05-12,19.2,2.6,1.7,1.7,1,1,U,none,Ul,none,none,NA
+2020-05-12,19.2,2.6,1.7,1.7,1,1,U,none,U,none,none,NA
 2020-05-12,35,3.2,3.1,3,1,1,Cc,none,none,none,none,NA
 2020-05-12,127.1,5.6,NA,6.3,1,0,U,none,none,none,none,NA
 2020-05-12,163.5,5.7,2.9,7.3,1,0,My,none,Ls,Dl,none,NA
@@ -2507,7 +2507,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-04-25,7,2.3,NA,NA,1,0,Ls,none,none,none,none,NA
 2021-04-25,8.5,2.5,2.3,NA,1,0,Ls,none,Ls,Dl,none,NA
 2021-04-26,15.2,1.7,1.9,NA,1,0,Ro,none,Ul,none,none,NA
-2021-04-30,11.5,3.4,3.2,NA,1,0,Ls,none,Pt,Am,none,Pyropia nereocystis
+2021-04-30,11.5,3.4,3.2,NA,1,0,Ls,none,Py,Am,none,Pyropia nereocystis
 2021-05-02,22.6,4.2,2,3.2,1,0,U,none,none,none,none,NA
 2021-05-04,79,4,NA,5.3,1,0,U,none,none,none,none,NA
 2021-05-04,24.3,2.8,NA,4.8,1,0,Ls,none,Ul,none,none,NA
@@ -2620,7 +2620,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-06-12,77.8,4,2.1,7,1,0,U,none,none,none,none,NA
 2021-06-12,133.5,6.1,2.3,NA,1,0,nd,none,none,none,none,NA
 2021-06-12,36.2,4.5,3.1,4,1,0,Cc,none,Dl,none,none,NA
-2021-06-12,13.4,2.3,2,2.7,1,0,Cr,none,none,none,none,NA
+2021-06-12,13.4,2.3,2,2.7,1,0,Cf,none,none,none,none,NA
 2021-06-12,90.5,4.9,2.7,8.2,1,0,U,none,none,none,none,NA
 2021-06-12,163,5.6,1.8,NA,1,0,U,none,none,none,none,NA
 2021-06-12,44.5,3.5,2.2,6,1,0,U,none,none,none,none,NA
@@ -2635,12 +2635,12 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-06-12,23.4,3.1,2.2,3,1,0,Ba,none,none,none,none,NA
 2021-06-12,22,2.8,2.3,3,1,0,U,none,Ls,none,none,NA
 2021-06-12,34.7,3.2,1.8,3,1,0,U,none,none,none,none,NA
-2021-06-12,24.3,3.8,2.3,3,1,0,U,none,Cc,none,none,NA
+2021-06-12,24.3,3.8,2.3,3,1,0,U,none,Cs,none,none,NA
 2021-06-12,12.8,2.7,2.7,3,1,0,U,none,Pl,none,none,NA
 2021-06-12,6.9,1.3,2.6,2,1,0,My,Ba,none,none,none,NA
 2021-06-12,17.5,3.5,2.6,3.7,1,0,U,none,none,none,none,NA
 2021-06-12,31.1,4,2.1,4,1,0,U,none,none,none,none,NA
-2021-06-12,8.2,3.9,2.5,4.4,1,0,Cr,none,Cf,none,none,NA
+2021-06-12,8.2,3.9,2.5,4.4,1,0,Cf,none,Cf,none,none,NA
 2021-06-12,49.9,3.8,2.4,3,1,0,U,none,none,none,none,NA
 2021-06-12,19.2,2.7,1.6,3.5,1,0,U,none,none,none,none,NA
 2021-06-12,22.9,3.3,2.4,4.2,1,0,U,none,none,none,none,NA
@@ -2696,7 +2696,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-06-12,40.5,3.1,NA,2.4,1,0,U,none,none,none,none,NA
 2021-06-12,36,3.5,2.8,3,1,0,Sh,none,none,none,none,NA
 2021-06-12,33.5,4.3,1.9,4,1,0,Ls,none,none,none,none,NA
-2021-06-12,36,4.4,NA,NA,1,0,Ls,none,Pt,An,Ls,NA
+2021-06-12,36,4.4,NA,NA,1,0,Ls,none,Py,An,Ls,NA
 2021-06-12,88.5,5.7,2.3,NA,1,0,U,none,Ls,none,none,NA
 2021-06-12,15.7,2.7,2.5,3.2,1,0,U,none,Dl,none,none,NA
 2021-06-12,175.4,5.8,2.3,8,1,0,U,none,Hf,none,none,NA
@@ -2805,7 +2805,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-08-14,40.4,2.9,2.5,2,1,0,Ba,none,none,none,none,NA
 2021-08-14,11.2,2.2,2.4,2.5,1,0,U,none,none,none,none,NA
 2021-08-14,17,2.3,NA,2.1,1,0,Ba,none,none,none,none,NA
-2021-08-14,92,4.3,3.4,NA,1,0,Mu,none,Pt,Ls,none,Py on stipe and bulb
+2021-08-14,92,4.3,3.4,NA,1,0,Mu,none,Py,Ls,none,Py on stipe and bulb
 2021-08-18,59.5,3,NA,3.5,1,0,My,none,none,none,none,NA
 2021-08-18,14,2.2,NA,2.7,1,0,Ba,none,none,none,none,NA
 2021-08-18,12.7,1.5,NA,2,1,0,Ba,none,none,none,none,NA
@@ -2847,7 +2847,7 @@ Date,Stipe,Bulb,Blade,Ho Fa,Single,Group,Subst,Sub2,CoSp1,CoSp2,CoSp3,Notes
 2021-09-29,12.2,2.2,2,1.9,1,0,Ba,none,none,none,none,NA
 2021-09-29,14.9,2.2,1.8,2.5,1,0,Ba,none,none,none,none,NA
 2021-09-29,11.5,1.7,1.8,2.2,1,0,U,none,none,none,none,NA
-2021-09-30,30.3,3.1,1.9,5.7,1,0,Sh,none,Bo,none,none,Flustrellidra
+2021-09-30,30.3,3.1,1.9,5.7,1,0,Sh,none,Br,none,none,Flustrellidra
 2021-09-30,20.8,2.5,NA,2.1,1,0,Ba,none,none,none,none,NA
 2021-10-01,7.6,1.4,2.6,2.5,1,0,U,none,none,none,none,NA
 2021-10-02,43.3,3.4,1.9,2.2,1,0,U,none,none,none,none,NA
