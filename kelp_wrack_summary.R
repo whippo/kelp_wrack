@@ -91,6 +91,7 @@ library(tidyverse)
 library(viridis)
 library(lme4)
 library(lubridate)
+library(ggpubr)
 
 options(max.print = 9999)
 
@@ -633,7 +634,7 @@ ggplot(young_sporophyte_monthly) +
 
 
 
-# how many obervations on each day? All singletons removed
+# how many observations on each day? All singletons removed
 datecounts <- as_tibble(table(young_sporophyte_monthly['Date'])) %>%
   mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
   mutate(n = n - 1) %>%
@@ -702,3 +703,89 @@ ggplot(young_sporophyte_monthly, aes(x = monthday, y = Stipe, color = Group)) +
 
 
 
+# Young sporophyte counts by size class 
+
+ys15 <- young_sporophyte_monthly %>%
+  filter(0.1 <= Stipe & Stipe < 15.1)
+
+ys20 <- young_sporophyte_monthly %>%
+  filter(0.1 <= Stipe & Stipe < 20.1)
+
+ys25 <- young_sporophyte_monthly %>%
+  filter(0.1 <= Stipe & Stipe < 25.1)
+
+ggplot(ys15, aes(x = monthday, y = Stipe)) +
+  geom_point() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", breaks = "1 month",
+               date_labels = ("%b")) +
+  theme(axis.text.x = element_text(hjust = -0.2)) +
+  facet_wrap(.~year, ncol = 1)
+
+ggplot(ys20, aes(x = monthday, y = Stipe)) +
+  geom_point() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", breaks = "1 month",
+               date_labels = ("%b")) +
+  theme(axis.text.x = element_text(hjust = -0.2)) +
+  facet_wrap(.~year, ncol = 1)
+
+ggplot(ys25, aes(x = monthday, y = Stipe)) +
+  geom_point() +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", breaks = "1 month",
+               date_labels = ("%b")) +
+  theme(axis.text.x = element_text(hjust = -0.2)) +
+  facet_wrap(.~year, ncol = 1)
+
+young_sporophyte_cohort <- young_sporophyte_monthly %>%
+  mutate(cohort = case_when(
+    Stipe <= 15 ~ "0.1-15",
+    Stipe <= 20 ~ "15.1-20",
+    Stipe <= 25 ~ "20.1-25")
+  )
+
+
+
+## THIS FINALLY WORKED! STIPE LENGTH DOTPLOT AND DENSITY DISTRIBUTION IN ONE FIGURE!
+
+# color coded by length
+
+young_sporophyte_cohort %>%
+  filter(is.na(Stipe) | Stipe <= 25) %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/2000, col = cohort), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.013), n.breaks = 6, labels = c("0", "5", "10", "15", "20", "25"),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
+ # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-01-20'), y = 0.012, label = "n = 6960")
+
+# color coded by year
+
+young_sporophyte_cohort %>%
+  filter(is.na(Stipe) | Stipe <= 25) %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/2000, col = year), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.013), n.breaks = 6, labels = c("0", "5", "10", "15", "20", "25"),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
+  # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-01-20'), y = 0.012, label = "n = 6960")
+  
