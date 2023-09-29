@@ -789,3 +789,77 @@ young_sporophyte_cohort %>%
         axis.title.y.right = element_text(vjust = 2)) +
   annotate(geom = "text", x = as.Date('2020-01-20'), y = 0.012, label = "n = 6960")
   
+# single stipes color coded by year
+
+young_sporophyte_cohort %>%
+  filter(is.na(Stipe) | Stipe <= 25) %>%
+  filter(Group == 0) %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/2000, col = year), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.013), n.breaks = 6, labels = c("0", "5", "10", "15", "20", "25"),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
+  # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-04-15'), y = 0.013, label = "n = 1720")
+
+# get number of singles in this dataset:
+singles <- young_sporophyte_cohort %>%
+  filter(is.na(Stipe) | Stipe <= 25) %>%
+  filter(Group == 0)
+
+
+# separate out 'primary recruits' that have secondary recruits on them, and secondary recruits on holdfasts
+
+young_sporophyte_cohort %>%
+  filter(Single == 0 & Subst != "Nl") %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/10000, col = year), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.025), n.breaks = 6, labels = c("0", "50", "100", "150", "200", "250"),
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
+  # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-04-15'), y = 0.025, label = "n = 806") 
+
+lengthsubs <- young_sporophyte_cohort %>%
+  filter(Single == 0 & Subst != "Nl")
+
+young_sporophyte_cohort %>%
+  filter(Single == 0 & Subst == "Nl") %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/7000, col = year), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.03), 
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2) +
+  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
+  # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-04-15'), y = 0.025, label = "n = 806") 
+
+lengthsubs <- young_sporophyte_cohort %>%
+  filter(Single == 0 & Subst != "Nl")
+
+lengthsecs <- young_sporophyte_cohort %>%
+  filter(Single == 0 & Subst == "Nl")
+
