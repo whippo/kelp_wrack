@@ -1,9 +1,9 @@
 ---
-title: "Kelp Wrack Metrics"
+title: "Kelp Wrack Data Summary"
 subtitle: "Data collected at Bandon Beach from 2018-2021"
 author: 
 - David Bilderback, Oregon Institute of Marine Biology
-- Ross Whippo, Oregon Institute of Marine Biology
+- Ross Whippo, NOAA - NCCOS
 date: 'Created: 2022-04-01  ; (Updated: `r Sys.Date()`)'
 output:
   html_document: 
@@ -62,22 +62,40 @@ knitr::opts_chunk$set(echo = TRUE,
 
 # Summary
 
-Hi Dave, this is as far as I've gotten with the analysis so far and I thought you might like to take a look at it. I have a few questions about the data set itself and would appreciate feedback on the following issues:
-
-I am also curious as to the status of the 'mature sporophyte' data set. Do you have additional entries for that as well? Would you like me to combine them into a single dataset? It's fairly easy for me to put them together, and then take apart during analysis, as-needed.
-
-Overall, this is a very impressive and exciting data set. I'm particularly interested in digging into the recruitment question that is represented in the final figure. It would be useful to generate a model that back-calculates other demographics of the local population, like spore release and settlement. Perhaps relating the sporophyll and recruitment data would be a neat way to do it (all within a single set of data, no less!). 
-
-I have other questions that came up over the course of this and previous analyses, and I will work to add more to this document. If you have any particular thoughts on what I've presented here, do let me know. I will send you updates as I progress in my analyses. 
+Hi Dave, 
 
 # Methods
 
+## Study site
 
-## Field Surveys
+Location - A large and a smaller ancillary kelp bed of *Nereocystis luetkeana* (K. Martens) Postels & Ruprecht lie about 741 and 528 m, respectfully, off the coast at Bandon, Oregon.  The large kelp bed with a surface area of about 355 m² is leeward of a rocky complex about 300 m long with a heading of 43.2°.  The smaller kelp bed with a surface area of about 30 m² is leeward of a large rock.  The nearest kelp beds to the north and south of these beds are about 13 and 28 km, respectively.
 
-Dave, can you provide me a comprehensive description of your field methods? I have what I pulled from the metadata below, but it would be great to have more detail about the specific location, the scope of the transects, what time of day they were conducted, any details you may have about how high on the tideline you looked for sporophytes, the general condition of the sporophytes (were they dessicated? fresh? both? neither? Did you treat them differently depending on their condition [beyond being 'intact']?), did you ever subset if there were too many on the beach, and any other pertinent information regarding your collections.
 
-All intact, individual young sporophytes and clusters of young sporophytes with holdfasts, stipes, bulbs and blades were collected and brought to the lab. The diameter of some holdfasts were measured to the nearest mm. Because of the elasticity of the stipe, its length was measured to the nearest 0.5 cm.  The diameter of the bulb was measured with a caliper to the nearest mm.  The width of some of the widest blades were measured to the nearest mm.
+## Field surveys
+
+### Sampling Transect
+
+Preliminary observations indicated that Nereocystis sporophytes of all ages wash up on the beach at Bandon.  The beach is a high energy one with a wide surf zone consisting of three or more sand bars and troughs and a low sloping, wide beach of fine, mature sand.  Waves break on the sand bars, thereby dissipating their energy as they move more gently over the low gradient beach.  The beach experiences a semidiurnal tide with two high tides of unequal sizes each day. 
+
+A one km long sampling transect centered at N 43.08380, W 124.43471 was established on the beach approximately 2 km south of the Bandon kelp beds.  The width of the sampling transect varied with the tidal phase.   During the summer, the width of the transect could be as wide as 255 m while during the winter the width of the beach could be as narrow as 8 m.  The number of days that the transect was sampled in 2018, 2019, 2020, 2021 and 2022 were 181, 328, 369, 349 and 150, respectively.
+
+### Data collection
+
+Sporophytes with stipes ranging from 0.5 to 180 cm.  To investigate the recruitment of young sporophytes of Nereocystis, all small sporophytes with at least a holdfast, stipe and bulb (pneumatocyst) were collected from the beach each survey day and brought to the laboratory to be measured.  From 4/8/2018 to 12/31/2021, the length of the stipe was measured to the nearest mm from the attachment with the holdfast to the base of the bulb, the type of substrate was determined and the associated cospecies of algae were identified.   Whether a young sporophyte was a single individual or a member of an association of Nereocystis sporophytes was noted.  From 7/12/2018 to 12/31/2021, the bulb diameter was determined to the nearest mm with a caliper.  From 6/30/2019 to 12/31/2021, the diameter of the holdfast was measured to the nearest mm.  From 7/11/2019 to 12/31/2021, the widest blade on the young sporophyte was measured to the nearest mm. 
+
+On October 20, 21, 24 and 26, 2018; November 3 and 4, 2018 and May 10, 15, 17, 18 and 21, 2019, all young intact and partial sporophytes were counted on the beach.  Partial sporophytes could lack a holdfast or a holdfast and a portion of the stipe.  Stipes that were either physically snapped or subjected to herbivory were noted.          
+
+Immature and reproductively mature sporophytes with stipes longer than 180 cm.  Only intact, untangled Nereocystis sporophytes were measured.  Only a few reproductively mature sporophytes had stipes less than 180 cm in length.  Initially, the study focused on the production of reproductive sori by Nereocystis but was expanded to include Nereocystis sporophyte stipe lengths, widest blade widths and bulb (pneumatocyst) diameters.  From 4/18/2018 to 7/10/2021, the number of maturing sori, the number of sori releasing propagules and the number of abscised sori on the widest blade on each Nereocystis sporophyte was recorded.  The presence and type of epiphytes and/or epizootics on the Nereocystis stipes also was noted.  After 6/14/2018 the length of the stipe of the intact Nereocystis sporophyte was recorded to the nearest cm.  Because the boundaries between the stipe and bulb were ill-defined, the stipe was measured from the holdfast to 15 cm below blade attachment to the bulb.   By 7/4/2018 the width of the widest blade of the sporophyte to a tenth of a cm was consistently recorded.  On 7/13/2018 the circumference of the bulb to a tenth of a cm was noted in the field and transformed to a bulb diameter using a Circumference Calculator created by Bonga Szyk and Mateusz Muncha at omnicalculator.com.  This full array of data was recorded in an Excel file until the conclusion of this portion of the study on 7/10/2021.
+
+To investigate the complexity of Nereocystis canopy, sporophytes were randomly selected on February 25, March 4, 5 and 13, 2020, and the number of blades of each sporophyte were counted, and the longest and widest blade of each sporophyte were measured.  From March 22 to March 31, 2021, 10 sporophytes were randomly selected, and the length of each stipe was recorded.  For each of these sporophytes, the number of fertile blades with sori and sterile blades without sori were counted and the width of every fertile blade was noted.  For each blade, the number of sori, the number of sori releasing or having released propagules and the number of abscised sori were noted.  Also, for each fertile blade, the length and width of the fertile zone of sori, the length and width of zone with a sorus releasing or having released propagules, and the distance from proximal end of the fertile zone to the petiole attachment were recorded.
+
+The canopy wet weight of the blades and bulb of randomly selected sporophytes was determined by excising the blades and bulb from the stipe 15 cm below the attachment of the blades to the bulb on May 5, 6, 7 and 9, 2019, washing them in sea water to remove sand, draining off the excess sea water and weighing them with a Modern Step hanging scale.  
+To determine the nature of the propagules produced by Nereocystis sori, portions of ripe sori from freshly stranded Nereocystis were collected in plastic bags with cold sea water on 12/28-29/2019 and 1/11/2020.  A sorus and sea water were transferred to a finger bowl.  More cold sea water was added to the finger bowl and set aside at room temperature.  Occasionally, the sorus was washed with sea water from a pipette.  After a green film formed on the bottom of the finger bowl, a sample was pipetted onto a slide and a cover slip applied. The sample was examined with a compound scope and photographed. 
+
+Preliminary observations indicated that reproductive sori are initiated at the tip of the blade.  These sori are long, narrow and tapered at their tips (Type 1). Subsequent sori are initiated proximally, and those formed midblade are wide and rectangular (Type 2).  As soral initiation approaches 20 cm of the base of the blade, the sori become smaller and square in shape (Type 3).  To investigate sorus sequencing and development, data was gathered on all individual, maturing or mature Nereocystis from 4/11/2021 to 5/28/2022.  Each sporophyte was assessed whether it had overwintered or began development in the current year.  Overwintering sporophytes have epiphytes and epizootics on the holdfast, a dull, dark brown stipe and usually, a heavy load of epiphytes on the stipe.  The blades of overwintering sporophytes also may be large and wide.  Sporophytes that began development during the current year have little or no epiphytes and epizootics on the holdfast, a glossy, olive-green stipe with little or no epiphytes on the stipe.  The presence and the type of epiphytes on the stipe were noted.   The presence of blades with Type 1, 2 or 3 sori on the sporophyte was noted, and the width of the widest blade with each type of sorus was recorded.  For the widest blade with each type of sorus, the number of sori, the number of sori releasing propagules and the number of abscised sori was recorded.  For blades with Type 3 sori, the distance from the proximal end of the fertile zone to the base of the petiole was measured as well as the length and width of the fertile zone.  For immature sporophytes the width of the widest blade was noted .
+
+To determine why sporophytes wash up on the beach, the basal portion of every untangled sporophyte was examined from 4/7/2021 to 4/19/2022.  The number of stipes with an intact holdfast, the number of stipes with an intact holdfast with haptera subjected to herbivory and/or burrowing, the number of stipes with only a portion of the holdfast and the number of stipes without a holdfast were recorded.   Evidence of urchin (Strongylocentrotus purpuratus) herbivory also was noted.
+
 
 ## Data Analysis
 
@@ -105,7 +123,7 @@ tabpath <- "~/Git/kelp_wrack/Tables"
 
 ```
 
-```{r}
+```{r, echo = FALSE}
 
 # Import all data and manage for analyses/visualizations
 
@@ -158,6 +176,59 @@ young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
          "Ba" = "Bo",
          "By" = "Bo")
 
+# remove year so months overlap
+young_sporophyte_monthly <- young_sporophyte %>%
+  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", tz = "PT")) %>%
+  arrange(monthday)
+
+young_sporophyte_cohort <- young_sporophyte_monthly %>%
+  mutate(cohort = case_when(
+    Stipe <= 15 ~ "0.1-15",
+    Stipe <= 20 ~ "15.1-20",
+    Stipe <= 25 ~ "20.1-25")
+  ) %>%
+  filter(!is.na(cohort))
+
+# read in mature dataset
+
+mature_sporophyte <- read_csv("Data/mature_sporophyte_data.csv", 
+    col_types = cols(date = col_datetime(format = "%m/%d/%Y"), 
+        stipe_length = col_number(), bulb_diam = col_number(), 
+        blade_width = col_number()))
+
+# rename columns to match young sporophtye
+mature_sporophyte <- mature_sporophyte %>%
+  mutate(Date = date,
+         Stipe = stipe_length,
+         Bulb = bulb_diam,
+         Blade = blade_width,
+         .keep = "unused")
+
+# join both datasets into one
+all_sporophyte <- young_sporophyte %>%
+  bind_rows(mature_sporophyte)
+
+# remove year so months overlap
+all_sporophyte_monthly <- all_sporophyte %>%
+  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", tz = "PT")) %>%
+  arrange(monthday)
+
+# add cohort values
+all_sporophyte_cohort <- all_sporophyte_monthly %>%
+  mutate(cohort = case_when(
+    Stipe <= 15 ~ "0.1-15",
+    Stipe <= 20 ~ "15.1-20",
+    Stipe <= 25 ~ "20.1-25",
+    Stipe > 25 ~ "25+")
+  ) %>%
+  filter(!is.na(cohort))
+
 # substrate type dataset
 substrateData <- read_csv("Data/substrateCodes.csv")
 
@@ -182,10 +253,60 @@ cospecies <- cospeciesData %>%
 
 ```
 
+## When are the recruitment pulses for the different cohorts of sporophytes across the year?
+
+```{r, echo = FALSE}
+
+# stipe length and density by month
+young_sporophyte_cohort %>%
+  filter(is.na(Stipe) | Stipe <= 25) %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = Stipe/2000, col = cohort), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.017), n.breaks = 8, labels = c("0", "5", "10", "15", "20", "25", "30", "35"), 
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
+  scale_x_date(name = "Month", 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
+  geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 4228")
+
+```
+
+
+## How does this compare to mature wrack?
+
+```{r, echo = FALSE}
+
+# stipe length and density by month
+all_sporophyte_cohort %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = log(Stipe + 1)/475, col = cohort), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Log stipe length", lim = c(0,0.017), n.breaks = 10, labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "10"), 
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
+  scale_x_date(name = "Month", 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.8, col = "white") +
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
+  geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 7794")
+
+```
 
 ## For each of the four years, how many days was the beach transect surveyed for young sporophytes?
 
-```{r}
+```{r, echo = FALSE}
 
 young_sporophyte_q1 <- young_sporophyte %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
@@ -205,7 +326,7 @@ ggplot(young_sporophyte_q1, aes(x = year, y = days)) +
 
 ## For each of the four years how many days were young sporophytes found on the transect?
 
-```{r}
+```{r, echo = FALSE}
 
 young_sporophyte_q2 <- young_sporophyte  %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
@@ -225,30 +346,18 @@ ggplot(young_sporophyte_q2, aes(x = year, y = days)) +
 
 ## Is there a relationship between stipe length and bulb diameter?
 
-```{r}
+```{r, echo = FALSE}
 
-fit1 <- lm(Bulb ~ Stipe, data = young_sporophyte)
-fit2 <- lm(Bulb~poly(Stipe,2,raw=TRUE), data=young_sporophyte)
-fit3 <- lm(Bulb~poly(Stipe,3,raw=TRUE), data=young_sporophyte)
-fit4 <- lm(Bulb~poly(Stipe,4,raw=TRUE), data=young_sporophyte)
-fit5 <- lm(Bulb~poly(Stipe,5,raw=TRUE), data=young_sporophyte)
-
-AIC(fit1, fit2, fit3, fit4, fit5)
-
-summary(fit1)
-
-ggplot(young_sporophyte, aes(x = Stipe, y = Bulb, na.rm = TRUE)) +
+ggplot(young_sporophyte, aes(x = Bulb, y = Stipe, na.rm = TRUE)) +
   geom_point() +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "loess") +
   theme_minimal() +
-  labs(y = "Bulb diameter (cm)", x = "Stipe length (cm)", title = "Relationship between stipe length and bulb diameter (young sporophytes)") + 
-  annotate("text", x = 150, y=9, label = "Adj. R-squared = 0.62, p < 0.0001")
-
+  labs(y = "Bulb diameter (cm)", x = "Stipe length (cm)", title = "Relationship between stipe length and bulb diameter (young sporophytes)") 
 ```
 
 ## Is there a relationship between bulb diameter and widest blade width?
 
-```{r}
+```{r, echo = FALSE}
 
 fit1 <- lm(Bulb ~ Blade, data = young_sporophyte)
 fit2 <- lm(Bulb~poly(Blade,2,raw=TRUE), data=young_sporophyte)
@@ -271,19 +380,23 @@ ggplot(young_sporophyte, aes(x = Blade, y = Bulb, na.rm = TRUE)) +
 
 ## What is the mean diameter of holdfasts?
 
-```{r}
+```{r, echo = FALSE}
 
-ggplot(young_sporophyte, aes(y = `Ho Fa`)) +
-  geom_boxplot() +
+ggplot(young_sporophyte, aes(x = `Ho Fa`)) +
+  geom_histogram() +
   theme_minimal() +
-  labs(y = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
-  annotate("text", x = 0.2, y = 11, label = "mean = 3.00; \n median = 2.60; \n range = 0.3 - 12.00")
+  labs(x = "Holdfast diameter (cm)", title = "Range of holdfast diameters") +
+  annotate("text", x = 10, y = 120, label = "mean = 3.00", color = "red") +
+  annotate("text", x = 10, y = 110, label = "median = 2.60", color = "blue") +
+  annotate("text", x = 10, y = 100, label = "range = 0.3 - 12.00") +
+  geom_vline(xintercept = 3, color = "red") +
+  geom_vline(xintercept = 2.6, color = "blue")
 
 ```
 
 ## For each year, how many sporophytes were singular, and how many were clusters?
 
-```{r}
+```{r, echo = FALSE}
 
 young_sporophyte_q3 <- young_sporophyte %>%
   separate(Date, c("year", "month", "day"), sep = "-") %>%
@@ -308,7 +421,7 @@ ggplot(young_sporophyte_q3, aes(x = year, label = Single)) +
 
 ## What is the count and percentage of each substrate type?
 
-```{r}
+```{r, echo = FALSE}
 
 # THIS COULD BE A GREAT FIGURE IF ALL OTHER DATA ADDED IN - INFOGRAPHIC STYLE
 
@@ -339,7 +452,7 @@ ggplot(young_sporophyte_q4 %>%
 
 ## How common were cospecies? Numbers and percentages.
 
-```{r}
+```{r, echo = FALSE}
 
 # primary
 
@@ -402,29 +515,8 @@ ggplot(cospecies_totals, aes(x = Total_cospecies, y = total)) +
 
 ```
 
-## For each year, when does recruitment occur? (as function of % of 0.1-10cm length stipes throughout the year)
 
-```{r, fig.height = 8}
 
-# HOW LONG TILL STIPES REACH 10CM FROM SETTLEMENT?
-
-# THIS IS SUPER SEXY AND POTENTIAL THE CRUX OF THIS DATASET
-
-young_sporophyte_q9 <- young_sporophyte %>%
-  complete(Date = seq.Date(as.Date("2018-01-01"), as.Date("2021-12-31"), by="day")) %>%
-  separate(Date, c("year", "month", "day"), sep = "-", remove = FALSE) %>%
-  unite("month-day", month:day, remove = FALSE) %>% 
-  mutate(Stipe = ifelse(is.na(Stipe), 0.5, Stipe)) %>%
-  filter(Stipe < 10.1)
-
-ggplot(young_sporophyte_q9, aes(x = Date, y = Stipe)) +
-  geom_col() +
-  theme_minimal() +
-  labs(title = "Number of sporophytes < 10 cm stipe length observed by day", x = "Date", y = "Count of stipes < 10.1 cm") +
-  scale_x_date(breaks = "1 month", labels = date_format("%b")) +
-  facet_wrap(~year, nrow = 4, scales = "free_x")
-
-```
 
 # References
 

@@ -743,7 +743,8 @@ young_sporophyte_cohort <- young_sporophyte_monthly %>%
     Stipe <= 15 ~ "0.1-15",
     Stipe <= 20 ~ "15.1-20",
     Stipe <= 25 ~ "20.1-25")
-  )
+  ) %>%
+  filter(!is.na(cohort))
 
 
 
@@ -756,18 +757,37 @@ young_sporophyte_cohort %>%
   ggplot() +
   geom_point(aes(x = monthday, y = Stipe/2000, col = cohort), alpha = 0.4) +
   scale_y_continuous(
-    name = "Stipe Length (cm)", lim = c(0,0.013), n.breaks = 6, labels = c("0", "5", "10", "15", "20", "25"),
+    name = "Stipe Length (cm)", lim = c(0,0.017), n.breaks = 8, labels = c("0", "5", "10", "15", "20", "25", "30", "35"), 
     sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
   scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
   scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
                date_breaks = "1 month",
                date_labels = ("%b")) +
-  geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
- # scale_y_discrete(lim = c(0,0.026), labels = c("0", "4"))
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
+  geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-01-20'), y = 0.012, label = "n = 6960")
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.015, label = "n = 4228")
+
+# stipe length and density by month
+all_sporophyte_cohort %>%
+  ggplot() +
+  geom_point(aes(x = monthday, y = log(Stipe + 1)/475, col = cohort), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Log stipe length", lim = c(0,0.017), n.breaks = 10, labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "10"), 
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
+  scale_x_date(name = "Month", 
+               date_breaks = "1 month",
+               date_labels = ("%b")) +
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.8, col = "white") +
+  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
+  geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 7794")
 
 # color coded by year
 
@@ -863,3 +883,19 @@ lengthsubs <- young_sporophyte_cohort %>%
 lengthsecs <- young_sporophyte_cohort %>%
   filter(Single == 0 & Subst == "Nl")
 
+####
+#<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
+
+# SCRATCH PAD ####
+
+
+
+ggplot(young_sporophyte, aes(x = Stipe, y = Bulb, na.rm = TRUE)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(y = "Bulb diameter (cm)", x = "Stipe length (cm)", title = "Relationship between stipe length and bulb diameter (young sporophytes)") + 
+  annotate("text", x = 150, y=9, label = "Adj. R-squared = 0.62, p < 0.0001")
+
+ggplot(SBgenerated) +
+  geom_point(aes(x = S, y = B))
