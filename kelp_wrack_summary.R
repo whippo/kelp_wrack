@@ -300,6 +300,10 @@ total_wrack_offset$offset7 <- wrack_offset7$offset7
 wrack_fit <- lm(n ~ WSPD + offset1 + offset2 + offset3 + offset4 + offset5 + offset6 + offset7, data = total_wrack_offset)
 summary(wrack_fit)
 
+
+
+
+
 ###################################################################################
 # VISUALIZATIONS                                                                  #
 ###################################################################################

@@ -1,0 +1,5 @@
+SST Data downloaded from: https://www.ndbc.noaa.gov/station_history.php?station=poro3
+On 2023-10-31
+Station PORO3 - 9431647 - Port Orford, OR
+Owned and maintained by NOAA's National Ocean Service
+42.739 N 124.498 W (42°44'20" N 124°29'53" W)
