@@ -9,6 +9,9 @@ output:
   word_document:
     toc: yes
     toc_depth: '4'
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
   html_document: 
     code_folding: hide
     df_print: kable
@@ -19,11 +22,6 @@ output:
     toc: yes
     toc_depth: 4
     toc_float: true
-  pdf_document:
-    toc: yes
-    toc_depth: '4'
-bibliography: references.bib 
-nocite: '@*'
 ---
 
 <style>
