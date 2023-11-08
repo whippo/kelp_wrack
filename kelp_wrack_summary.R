@@ -224,6 +224,18 @@ noaa_portorford_buoydata_2018 <- noaa_portorford_buoydata_2018 %>%
   unite("date", YY:DD, sep = "-", remove = FALSE)
 noaa_portorford_buoydata_2018$date <- as.Date(noaa_portorford_buoydata_2018$date)
 
+SST_2018 <- read_csv("Data/NOAA_SST_2018_PortOrford_PORO3_9431647.csv", 
+                     col_types = cols(WSPD = col_number()), 
+                     skip = 1)
+SST_2018 <- read_csv("Data/NOAA_SST_2019_PortOrford_PORO3_9431647.csv", 
+                     col_types = cols(WSPD = col_number()), 
+                     skip = 1)
+SST_2018 <- read_csv("Data/NOAA_SST_2020_PortOrford_PORO3_9431647.csv", 
+                     col_types = cols(WSPD = col_number()), 
+                     skip = 1)
+SST_2018 <- read_csv("Data/NOAA_SST_2021_PortOrford_PORO3_9431647.csv", 
+                     col_types = cols(WSPD = col_number()), 
+                     skip = 1)
 
 ###################################################################################
 # NOAA WEATHER DATA                                                               #

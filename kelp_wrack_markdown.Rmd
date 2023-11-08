@@ -6,12 +6,6 @@ author:
 - Ross Whippo, NOAA - NCCOS
 date: 'Created: 2022-04-01  ; (Updated: `r Sys.Date()`)'
 output:
-  word_document:
-    toc: yes
-    toc_depth: '4'
-  pdf_document:
-    toc: yes
-    toc_depth: '4'
   html_document: 
     code_folding: hide
     df_print: kable
@@ -22,6 +16,15 @@ output:
     toc: yes
     toc_depth: 4
     toc_float: true
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+  word_document:
+    toc: yes
+    toc_depth: '4'
+bibliography: references.bib 
+nocite: '@*'
+csl: marine-ecology-progress-series.csl
 ---
 
 <style>
@@ -72,6 +75,8 @@ library(leaflet.providers)
 library(sf)
 library(ggspatial)
 
+# fuction for "%notin%
+`%notin%` <- Negate(`%in%`)
 
 # set plot theme
 theme_set(theme_minimal())
@@ -94,7 +99,19 @@ here.
 
 # Introduction
 
-Kelp gametophytes can persist for up to 18 months, and may not produce gametes immediately (@dobkowski_factors_2019, @tom_temp_1993). 
+We can't see *Nereocystis* recruits below the water because they don't break the surface and can't be quantified by drones, or other imagery techniques. In addition, SCUBA and ROV surveys may provide more information, but are still highly geographically constrained. Monitoring intact sporophyte wrack can provide a minimum value for recruitment, particularly when abiotic conditions including currents, tides, upwelling, and wave pressure is know. Common variables that are monitored in the majority of locations where *Nereocystis* is found. 
+
+There is a long-standing debate over the life history of *Nereocystis*. Is it an annual (as is typically said) or is it a perennial? Maybe it's something in between, a semi-annual. It's known that *Nereocystis* can overwinter, and very large individuals may be observed during early portions of the year when there is no way they could have grown up so quickly (R. Whippo pers. obs., and others). There could be two potential reasons for this: 1) *Nereocystis* are highly reproductive in the fall, leading to spring recruitment observations, but they also may be reproductive in the spring (dependent upon initial recruitment of the parent sporophyte), and thus provide an addition  influx of gametophytes that result in late-summer sporophytes. Alternatively, as gametophytes can lie dormant (according to some experiments), it could be that latent gametophytes will then result in sporophytes in late summer. 
+
+What would these 'idealized' conditions be that would trigger gametophytes to reproduce and create this second wave of sporophytes? Is there an abiotic parameter in the data that correlates with higher late-summer recruitment? Temperature? Upwelling? It may also be a delayed reaction. What mid- or early-summer conditions might trigger gametophytes to reproduce? 
+
+We could address the first hypothesis by using the sorus data that was collected and relating that to the presumed delay between sorus production and sporophyte recruitment. Do the timelines make sense? Alternatively, are there specific abiotic conditions in the data that correlate with the late-summer recruitment? This may lend credence to the 'seed bank' hypothesis.
+
+The 'seed bank' problem is the the most wicked of all the *Nereocystis* questions. 
+
+Kelp gametophytes can persist for up to 18 months, and may not produce gametes immediately [@dobkowski_factors_2019; @tom_temp_1993]. 
+
+Here we provide evidence of a bimodal recruitment strategy in the semi-annual kelp *Nereocystis luetkeana*. 
 
 # Methods
 
@@ -281,6 +298,19 @@ cospecies <- cospeciesData %>%
          CoSp2 = Cosp,
          CoSp3 = Cosp)
 
+SST_2018 <- read_csv("Data/NOAA_SST_2018_PortOrford_PORO3_9431647.csv")
+SST_2019 <- read_csv("Data/NOAA_SST_2019_PortOrford_PORO3_9431647.csv")
+SST_2020 <- read_csv("Data/NOAA_SST_2020_PortOrford_PORO3_9431647.csv")
+SST_2021 <- read_csv("Data/NOAA_SST_2021_PortOrford_PORO3_9431647.csv")
+SST_all <- bind_rows(SST_2018, SST_2019, SST_2020, SST_2021)
+
+SST_date <- SST_all %>%
+  unite("date", `#YY`:`DD`, sep = "-") %>%
+  unite("time", hh:mm, sep = ":") %>%
+  unite("Date", date, time) %>%
+  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D"))
+
+
 
 ```
 
@@ -451,6 +481,46 @@ ggplot(young_sporophyte, aes(x = Stipe, y = Blade, na.rm = TRUE)) +
 
 ```
 
+# What are the SST for each month?
+
+```{r, echo = FALSE}
+
+SST_temp <- SST_all %>%
+  filter(WTMP %notin% c(999, 99)) %>%
+  mutate(month = month.abb[MM]) 
+SST_temp <- SST_temp %>%
+  mutate(month = factor(month, levels = c("Jan",
+                           "Feb",
+                           "Mar",
+                           "Apr",
+                           "May",
+                           "Jun",
+                           "Jul",
+                           "Aug",
+                           "Sep",
+                           "Oct",
+                           "Nov",
+                           "Dec"))) 
+SST_temp %>%
+ggplot(aes(x = month, y = WTMP, group = MM)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Month", y = "Water Temp (C)") 
+
+```
+
+# How are temperatures different across years?
+
+```{r, echo = FALSE}
+
+SST_temp %>%
+ggplot(aes(x = month, y = WTMP, group = MM)) +
+  geom_boxplot() +
+  theme_bw() +
+  labs(x = "Month", y = "Water Temp (C)") +
+  facet
+
+```
 ## For each of the four years, how many days was the beach transect surveyed for young sporophytes?
 
 ```{r, echo = FALSE}
