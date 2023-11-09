@@ -195,9 +195,11 @@ young_sporophyte$Date <- young_sporophyte$Date %>%
          "6/17/2028" = "6/17/2018",
          "56/2/2021" = "5/26/2021")
 young_sporophyte$Date <- mdy(young_sporophyte$Date)
-# fix bulb diameter and blade width typos
+# fix bulb diameter, stipe length, and blade width typos
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 53.0] <- 5.3
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 30.0] <- 3.0
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 62.0] <- 6.2
+young_sporophyte['Stipe'][young_sporophyte['Stipe'] == 228.0] <- 128.0
 young_sporophyte['Blade'][young_sporophyte['Blade'] == 22.0] <- 2.2
 # fix substrate typos
 young_sporophyte$Subst <- young_sporophyte$Subst %>%
@@ -249,7 +251,11 @@ mature_sporophyte <- read_csv("Data/mature_sporophyte_data.csv",
         stipe_length = col_number(), bulb_diam = col_number(), 
         blade_width = col_number()))
 mature_sporophyte <- mature_sporophyte %>%
-  mutate(date = as.Date(gsub("2008", "2018", date)))
+  mutate(date = as.Date(gsub("2008", "2018", date))) %>%
+  filter(date != as.Date("1900-01-04"))
+
+# fix bulb diameter typos
+mature_sporophyte['bulb_diam'][mature_sporophyte['bulb_diam'] == 72.0] <- 7.2
 
 # rename columns to match young sporophtye
 mature_sporophyte <- mature_sporophyte %>%
@@ -353,13 +359,15 @@ upwellingMonth <- upwellingTrans %>%
 
 ```{r, echo = FALSE}
 
+lab <- c("0", "", "", "", "", 
+         "5")
 # stipe length and density by month
 young_sporophyte_cohort %>%
   filter(is.na(Stipe) | Stipe <= 25) %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = Stipe/2000, col = cohort), alpha = 0.4) +
+  geom_point(aes(x = monthday, y = (Stipe/1400), col = cohort), alpha = 0.4) +
   scale_y_continuous(
-    name = "Stipe Length (cm)", lim = c(0,0.017), n.breaks = 8, labels = c("0", "5", "10", "15", "20", "25", "30", "35"), 
+    name = "Stipe Length (cm)", lim = c(0,0.018), breaks = seq(0, 0.018, by = 0.0036), labels = c("0", "5", "10", "15", "20", "25"), 
     sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
   scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
   scale_x_date(name = "Month", 
@@ -370,7 +378,7 @@ young_sporophyte_cohort %>%
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 4228")
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 4661")
 
 ```
 

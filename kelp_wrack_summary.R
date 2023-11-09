@@ -960,3 +960,55 @@ SST_temp %>%
   geom_boxplot(width = 0.1) +
   theme_bw() +
   labs(x = "Month", y = "Water Temp (C)") 
+
+
+dataset_young <- young_sporophyte %>%
+  mutate(dataset = "young")
+
+dataset_mature <- mature_sporophyte %>%
+  mutate(dataset = "mature")
+
+# join both datasets into one
+dataset_sporophyte <- dataset_young %>%
+  bind_rows(dataset_mature)
+
+# remove year so months overlap
+all_dataset_monthly <- dataset_sporophyte %>%
+  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", tz = "PT")) %>%
+  arrange(monthday)
+
+
+# add cohort values
+all_dataset_cohort <- all_dataset_monthly %>%
+  mutate(cohort = case_when(
+    Stipe <= 15 ~ "0.1-15",
+    Stipe <= 20 ~ "15.1-20",
+    Stipe <= 25 ~ "20.1-25",
+    Stipe > 25 ~ "25+")
+  ) %>%
+  filter(!is.na(cohort))
+
+# stipe length and density by month
+all_dataset_cohort %>%
+  ggplot() +
+  geom_vline(xintercept = as.Date('2018-12-31')) +
+  geom_vline(xintercept = as.Date('2019-12-31')) +
+  geom_vline(xintercept = as.Date('2020-12-31')) +  
+  geom_point(aes(x = Date, y = log(Stipe + 1)/3000, col = dataset), alpha = 0.4) +
+  scale_y_continuous(
+    name = "Log stipe length", lim = c(0,0.003), n.breaks = 7, labels = c("0", "", "3", "", "6", "", "8"), 
+    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.1, end = 0.9) +
+  scale_x_date(name = "Year", 
+               date_breaks = "1 year",
+               date_labels = ("%Y")) +
+  geom_density(aes(Date, group = dataset), inherit.aes = FALSE, size = 1.8, col = "white") +
+  geom_density(aes(Date, group = dataset), inherit.aes = FALSE, size = 1.5, col = "black") +
+  geom_density(aes(Date, color = dataset), inherit.aes = FALSE, size = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(hjust = -1.8), 
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.003, label = "n = 7794")
