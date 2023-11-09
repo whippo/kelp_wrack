@@ -359,17 +359,14 @@ upwellingMonth <- upwellingTrans %>%
 
 ```{r, echo = FALSE}
 
-lab <- c("0", "", "", "", "", 
-         "5")
 # stipe length and density by month
 young_sporophyte_cohort %>%
   filter(is.na(Stipe) | Stipe <= 25) %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = (Stipe/1400), col = cohort), alpha = 0.4) +
+  geom_point(aes(x = monthday, y = (Stipe/1400), col = cohort), alpha = 0.25) +
   scale_y_continuous(
-    name = "Stipe Length (cm)", lim = c(0,0.018), breaks = seq(0, 0.018, by = 0.0036), labels = c("0", "5", "10", "15", "20", "25"), 
-    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
-  scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
+    name = "Stipe Length (cm)") +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
   scale_x_date(name = "Month", 
                date_breaks = "1 month",
                date_labels = ("%b")) +
@@ -378,7 +375,7 @@ young_sporophyte_cohort %>%
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 4661")
+  annotate(geom = "text", x = as.Date('2020-11-30'), y = 0.018, label = "n = 4661")
 
 ```
 
@@ -390,11 +387,10 @@ young_sporophyte_cohort %>%
 # stipe length and density by month
 all_sporophyte_cohort %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = log(Stipe + 1)/475, col = cohort), alpha = 0.4) +
+  geom_point(aes(x = monthday, y = log(Stipe + 1)/400, col = cohort), alpha = 0.25) +
   scale_y_continuous(
-    name = "Log stipe length", lim = c(0,0.017), n.breaks = 10, labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "10"), 
-    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
-  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
+    name = "Stipe Length (cm)") +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
   scale_x_date(name = "Month", 
                date_breaks = "1 month",
                date_labels = ("%b")) +
@@ -402,9 +398,9 @@ all_sporophyte_cohort %>%
   geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
   geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.9), 
-        axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 7794")
+  theme(axis.text.x = element_text(hjust = -0.5), 
+        axis.title.y = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-01-30'), y = 0.011, label = "n = 9882")
 
 ```
 
@@ -414,25 +410,25 @@ all_sporophyte_cohort %>%
 
 # stipe length and density by month
 all_sporophyte_cohort %>%
-  ggplot() +
+  filter(Date < '2022-01-01') %>%
+  ggplot(aes(x = Date, y = log(Stipe + 1), col = cohort, group = cohort)) +
   geom_vline(xintercept = as.Date('2018-12-31')) +
   geom_vline(xintercept = as.Date('2019-12-31')) +
   geom_vline(xintercept = as.Date('2020-12-31')) +  
-  geom_point(aes(x = Date, y = log(Stipe + 1)/3000, col = cohort), alpha = 0.4) +
+  geom_point(alpha = 0.25) +
   scale_y_continuous(
-    name = "Log stipe length", lim = c(0,0.0026), n.breaks = 6, labels = c("0", "", "3", "", "6", ""), 
-    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+    name = "Log stipe length") +
   scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
   scale_x_date(name = "Year", 
                date_breaks = "1 year",
                date_labels = ("%Y")) +
-  geom_density(aes(Date, group = cohort), inherit.aes = FALSE, size = 1.8, col = "white") +
+  geom_density(inherit.aes = TRUE, size = 1.8, col = "white") +
   geom_density(aes(Date, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
   geom_density(aes(Date, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -1.8), 
-        axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.0025, label = "n = 7794")
+        axis.title.y.left = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.0022, label = "n = 9375")
 
 ```
 
