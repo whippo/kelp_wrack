@@ -915,3 +915,48 @@ ggplot(young_sporophyte, aes(x = Stipe, y = Bulb, na.rm = TRUE)) +
 
 ggplot(SBgenerated) +
   geom_point(aes(x = S, y = B))
+
+
+
+addvectors <- read.csv("Data/test.csv", header = FALSE)
+x <- addvectors[,4]
+y <- addvectors[,5]
+x + y
+sum(x)
+
+addvectors <- read.csv("Data/test2.csv", header = FALSE)
+x <- addvectors[,4]
+y <- addvectors[,5]
+x + y
+sum(x)
+
+upwellingMonth %>%
+  ggplot(aes(x = as.character(month), y = sqrt(ektrx))) +
+  geom_point() +
+  theme_bw() +
+  theme(axis.text.x=element_blank(),
+        axis.title.x=element_blank()) +
+  labs(x = "Month", y = "Upwelling")
+
+SST_temp <- SST_all %>%
+  filter(WTMP %notin% c(999, 99)) %>%
+  mutate(month = month.abb[MM]) 
+SST_temp <- SST_temp %>%
+  mutate(month = factor(month, levels = c("Jan",
+                                          "Feb",
+                                          "Mar",
+                                          "Apr",
+                                          "May",
+                                          "Jun",
+                                          "Jul",
+                                          "Aug",
+                                          "Sep",
+                                          "Oct",
+                                          "Nov",
+                                          "Dec"))) 
+SST_temp %>%
+  ggplot(aes(x = month, y = WTMP, group = MM)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  theme_bw() +
+  labs(x = "Month", y = "Water Temp (C)") 

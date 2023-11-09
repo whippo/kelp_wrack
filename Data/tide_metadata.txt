@@ -1,0 +1,8 @@
+Tide predictions from http://tide.arthroinfo.org/
+downloaded 2023-11-08
+Bandon, Coquille River, Oregon
+43.1200° N, 124.4133° W
+
+WWW Tide/Current Predictor: http://tide.arthroinfo.org
+Dean Pentcheff <tidecomment@gmail.com>
+Traditionally hosted from: Biological Sciences, University of South Carolina, Columbia SC 29208 USA

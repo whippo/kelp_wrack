@@ -1,19 +1,19 @@
 upwelling Data downloaded from: https://coastwatch.pfeg.noaa.gov/erddap/griddap/erdlasFnTran6.html
-On 2023-11-07
+On 2023-11-08
 
 FNMOC Ekman Transports, 360x180, 6-hourly
 
 time UTC
-Start: 2018-01-01T18:00:00Z
+Start: 2018-01-01T00:00:00Z
 Stide: 1
-Stop: 2021-12-31T18:00:00Z
+Stop: 2021-12-31T23:59:00Z
 
 lat north
-Start: 43.00
+Start: 43.5
 Stride: 1
-Stop: 43.16
+Stop: 43.5
 
 long east
-Start: 235.56
+Start: 235.5
 Stride: 1
-Stop: 235.66	
+Stop: 235.6	
