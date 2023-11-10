@@ -1,6 +1,5 @@
 ---
-title: "Kelp Wrack Data Summary"
-subtitle: "Data collected at Bandon Beach from 2018-2021"
+title: "Kelp wrack as a measure of recruitment, community structure, and seasonal trends in the canopy kelp *Nereocystis luetkeana*"
 author: 
 - David Bilderback, Oregon Institute of Marine Biology
 - Ross Whippo, NOAA - NCCOS
@@ -92,11 +91,11 @@ tabpath <- "~/Git/kelp_wrack/Tables"
 
 # Abstract
 
-Hi Dave, here's an updated version of some of the visualizations. I have put the newer figures that you requested toward the top.
+Goes here.
 
 ## Keywords
 
-here. 
+kelp forest, Laminariales, macroalgae, population ecology, spatial subsidy, subtidal ecology  
 
 # Introduction
 
@@ -109,6 +108,8 @@ What would these 'idealized' conditions be that would trigger gametophytes to re
 We could address the first hypothesis by using the sorus data that was collected and relating that to the presumed delay between sorus production and sporophyte recruitment. Do the timelines make sense? Alternatively, are there specific abiotic conditions in the data that correlate with the late-summer recruitment? This may lend credence to the 'seed bank' hypothesis.
 
 The 'seed bank' problem is the the most wicked of all the *Nereocystis* questions. 
+
+There is great difficulty surveying kelp via SCUBA, boat, or land-based aerial survey at many times of the year along the Oregon coast due to high winds, waves, and frequent storms. Wrack observations can provide an indirect measure of kelp reproduction, recruitment, and growth at times of the year when the kelp beds may be otherwise inaccessible. Likewise, satellite imagery can provide  measures of areal coverage and biomass, but cannot address population size structure or reproductive potential. 
 
 Kelp gametophytes can persist for up to 18 months, and may not produce gametes immediately [@dobkowski_factors_2019; @tom_temp_1993]. 
 
@@ -360,13 +361,14 @@ upwellingMonth <- upwellingTrans %>%
 ```{r, echo = FALSE}
 
 # stipe length and density by month
-young_sporophyte_cohort %>%
+all_sporophyte_cohort %>%
+  filter(Date < '2022-01-01') %>%
   filter(is.na(Stipe) | Stipe <= 25) %>%
   ggplot() +
   geom_point(aes(x = monthday, y = (Stipe/1400), col = cohort), alpha = 0.25) +
-  scale_y_continuous(
-    name = "Stipe Length (cm)") +
-  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
+   scale_y_continuous(
+    name = "Stipe Length (cm)", lim = c(0,0.018), breaks = seq(0, 0.018, by = 0.0036), labels = c("0", "5", "10", "15", "20", "25"),  sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.4, breaks = c("0.1-15", "15.1-20", "20.1-25")) +
   scale_x_date(name = "Month", 
                date_breaks = "1 month",
                date_labels = ("%b")) +
@@ -374,8 +376,9 @@ young_sporophyte_cohort %>%
   geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.left = element_text(vjust = 2),
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-30'), y = 0.018, label = "n = 4661")
+  annotate(geom = "text", x = as.Date('2020-11-30'), y = 0.018, label = "n = 4228")
 
 ```
 
@@ -386,10 +389,11 @@ young_sporophyte_cohort %>%
 
 # stipe length and density by month
 all_sporophyte_cohort %>%
+  filter(Date < '2022-01-01') %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = log(Stipe + 1)/400, col = cohort), alpha = 0.25) +
-  scale_y_continuous(
-    name = "Stipe Length (cm)") +
+  geom_point(aes(x = monthday, y = log(Stipe + 1)/460, col = cohort), alpha = 0.25) +
+ scale_y_continuous(
+    name = "Stipe Length (log + 1)", lim = c(0,0.018), breaks = seq(0, 0.018, by = 0.0045), labels = c("0", "2", "4", "6", "8"),  sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
   scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
   scale_x_date(name = "Month", 
                date_breaks = "1 month",
@@ -398,9 +402,10 @@ all_sporophyte_cohort %>%
   geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
   geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.5), 
-        axis.title.y = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-01-30'), y = 0.011, label = "n = 9882")
+  theme(axis.text.x = element_text(hjust = -1.8), 
+        axis.title.y.left = element_text(vjust = 2),
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2020-11-30'), y = 0.017, label = "n = 9375")
 
 ```
 
@@ -411,24 +416,25 @@ all_sporophyte_cohort %>%
 # stipe length and density by month
 all_sporophyte_cohort %>%
   filter(Date < '2022-01-01') %>%
-  ggplot(aes(x = Date, y = log(Stipe + 1), col = cohort, group = cohort)) +
+  ggplot(aes(x = Date, y = log(Stipe + 1)/4000, col = cohort, group = cohort)) +
   geom_vline(xintercept = as.Date('2018-12-31')) +
   geom_vline(xintercept = as.Date('2019-12-31')) +
   geom_vline(xintercept = as.Date('2020-12-31')) +  
   geom_point(alpha = 0.25) +
   scale_y_continuous(
-    name = "Log stipe length") +
-  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
+    name = "Stipe length (log + 1)", lim = c(0,0.0020), breaks = seq(0, 0.0020, by = 0.0005), labels = c("0", "2", "4", "6", "8"),  sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+  scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
   scale_x_date(name = "Year", 
                date_breaks = "1 year",
                date_labels = ("%Y")) +
-  geom_density(inherit.aes = TRUE, size = 1.8, col = "white") +
+  geom_density(aes(Date, group = cohort), inherit.aes = FALSE, size = 1.5, col = "white") +
   geom_density(aes(Date, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
   geom_density(aes(Date, color = cohort), inherit.aes = FALSE, size = 1) +
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -1.8), 
-        axis.title.y.left = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.0022, label = "n = 9375")
+        axis.title.y.left = element_text(vjust = 2),
+        axis.title.y.right = element_text(vjust = 2)) +
+  annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.0020, label = "n = 9375")
 
 ```
 
@@ -438,11 +444,11 @@ all_sporophyte_cohort %>%
 
 # total density by month
 all_sporophyte_cohort %>%
+  filter(Date < '2022-01-01') %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = log(Stipe + 1)/475), alpha = 0.4, color = "darkolivegreen4") +
+  geom_point(aes(x = monthday, y = log(Stipe + 1)/800), alpha = 0.4, color = "darkolivegreen4") +
   scale_y_continuous(
-    name = "Log stipe length", lim = c(0,0.017), n.breaks = 10, labels = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "10"), 
-    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
+    name = "Stipe length (log + 1)", lim = c(0,0.010), breaks = seq(0, 0.010, by = 0.0025), labels = c("0", "2", "4", "6", "8"),  sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
   scale_colour_viridis(option = "D", discrete = TRUE, begin = 0.9, end = 0.1, breaks = c("0.1-15", "15.1-20", "20.1-25", "25+")) +
   scale_x_date(name = "Month", 
                date_breaks = "1 month",
@@ -452,8 +458,9 @@ all_sporophyte_cohort %>%
   geom_density(aes(monthday), inherit.aes = FALSE, size = 1) +
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
+        axis.title.y.left = element_text(vjust = 2),
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.017, label = "n = 7794")
+  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.0098, label = "n = 9375")
 
 ```
 
