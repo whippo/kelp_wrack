@@ -1012,3 +1012,154 @@ all_dataset_cohort %>%
   theme(axis.text.x = element_text(hjust = -1.8), 
         axis.title.y.right = element_text(vjust = 2)) +
   annotate(geom = "text", x = as.Date('2021-06-15'), y = 0.003, label = "n = 7794")
+
+
+###### use SST_all from markdown to relate max sustained wind speed to wrack observations
+
+# extract daily mean wind speeds (all directions)
+dailyWSP <- SST_all %>%
+  unite(Date, `#YY`, MM, DD, sep = "-") %>%
+  mutate(Date = ymd(Date), .keep = "all") %>%
+  group_by(Date) %>%
+  mutate(dailySp = mean(WSPD)) %>%
+  select(Date, dailySp) %>%
+  distinct(Date, dailySp)
+
+# join daily wind speeds to sporophyte data
+all_sporophyte_wind <- all_sporophyte %>%
+  left_join(dailyWSP, join_by(Date))
+
+# plot of wind speed and sporophyte observations
+all_sporophyte_wind %>%
+  filter(!is.na(Stipe)) %>%
+  group_by(Date, dailySp) %>% 
+  tally() %>%
+  ggplot(aes(x = dailySp, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# extract daily mean wind speeds (onshore only)
+dailyWSP_onshore <- SST_all %>%
+  unite(Date, `#YY`, MM, DD, sep = "-") %>%
+  mutate(Date = ymd(Date), .keep = "all") %>%
+  filter(WDIR %in% c(1:179)) %>%
+  group_by(Date) %>%
+  mutate(dailySp_onshore = mean(WSPD)) %>%
+  select(Date, dailySp) %>%
+  distinct(Date, dailySp)
+
+# join daily wind speeds to sporophyte data
+all_sporophyte_wind <- all_sporophyte %>%
+  left_join(dailyWSP_onshore, join_by(Date))
+
+# plot of wind speed and sporophyte observations
+all_sporophyte_wind %>%
+  filter(!is.na(Stipe)) %>%
+  group_by(Date, dailySp) %>% 
+  tally() %>%
+  ggplot(aes(x = dailySp, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# plot all by wind direction
+
+dailyDir <- SST_all %>%
+  unite(Date, `#YY`, MM, DD, sep = "-") %>%
+  mutate(Date = ymd(Date), .keep = "all") %>%
+  group_by(Date) %>%
+  mutate(dailyDegree = mean(WDIR)) %>%
+  select(Date, dailyDegree) %>%
+  distinct(Date, dailyDegree)
+  
+# join daily wind speeds to sporophyte data
+all_sporophyte_wind <- all_sporophyte %>%
+  left_join(dailyDir, join_by(Date))
+
+# plot of wind speed and sporophyte observations
+all_sporophyte_wind %>%
+  filter(!is.na(Stipe), dailyDegree < 360) %>%
+  group_by(Date, dailyDegree) %>% 
+  tally() %>%
+  ggplot(aes(x = dailyDegree, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# add one day offset
+all_sporophyte_wind %>%
+  mutate(minus1offset = Date %m+% days(1)) %>%
+  select(minus1offset, dailyDegree) 
+all_sporophyte_wind %>%
+  filter(!is.na(Stipe), dailyDegree < 360) %>%
+  group_by(Date) %>% 
+  tally() %>%
+  mutate(minus1offset = Date %m+% days(1)) %>%
+  left_join(offset1) %>%
+  ggplot(aes(x = dailyDegree, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# add two day offset
+all_sporophyte_wind %>%
+  mutate(minus2offset = Date %m-% days(2)) %>%
+  filter(!is.na(Stipe), dailyDegree < 359) %>%
+  group_by(minus2offset, dailyDegree) %>% 
+  tally() %>%
+  ggplot(aes(x = dailyDegree, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+###### use upwelling from markdown to relate upwelling index to wrack observations
+
+dailyUpwelling <- upwellingTrans %>%
+  mutate(Date = date) %>%
+  group_by(Date) %>%
+  summarise(meanx = mean(ektrx), meany = mean(ektry))
+
+# join daily upwelling indices to sporophyte observations
+all_sporophyte_upwell <- all_sporophyte %>%
+  left_join(dailyUpwelling)
+
+# plot of upwelling and sporophyte observations (x componenet)
+all_sporophyte_upwell %>%
+  filter(!is.na(Stipe)) %>%
+  group_by(Date, meanx) %>% 
+  tally() %>%
+  ggplot(aes(x = meanx, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+# plot of upwelling and sporophyte observations (y component)
+all_sporophyte_upwell %>%
+  filter(!is.na(Stipe)) %>%
+  group_by(Date, meany) %>% 
+  tally() %>%
+  ggplot(aes(x = meany, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+# create new variable combining x and y
+all_sporophyte_upwell %>%
+  filter(!is.na(Stipe)) %>%
+  mutate(index = meanx + meany) %>%
+  group_by(Date, index) %>%
+  tally() %>%
+  ggplot(aes(x = index, y = log(n + 1))) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
