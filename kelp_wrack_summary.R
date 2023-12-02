@@ -1150,10 +1150,23 @@ all_sporophyte_upwell %>%
   geom_smooth(method = "lm")
 
 
+################### Quick graph of holdfast snapping
 
 
+holdfastSnapping <- read_csv("Data/holdfastSnapping.csv", 
+                             col_types = cols(WhHf = col_number(), 
+                                              ChWhHf = col_number(), BuWhHf = col_number(), 
+                                              `Sn Hf` = col_number(), `Sn St` = col_number(), 
+                                              Ur = col_number()))
 
+snapLong <- holdfastSnapping %>%
+  select(-`WhHf Sub`) %>%
+  pivot_longer(WhHf:Ur, names_to = "breakage", values_to = "value")
 
+ggplot(snapLong) +
+  geom_col(aes(x = breakage, y = value, fill = breakage)) +
+  scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.1, end = 0.8) +
+  theme_bw()
 
 
 
