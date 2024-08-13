@@ -5,7 +5,7 @@
 # Script created 2020-02-13                                                   ##
 # Data source: David Bilderback                                               ##
 # R code prepared by Ross Whippo                                              ##
-# Last updated 2024-01-31                                                     ##
+# Last updated 2024-08-12                                                     ##
 #                                                                             ##
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -527,11 +527,174 @@ mature_sporophyte_cohort %>%
            y = 0.0095, 
            label = "n = 3351")
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# RECRUITMENT MODEL                                                         ####
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+all_cohort_filled <- all_sporophyte_cohort %>%
+  filter(year %in% c("2018", "2019", "2020", "2021")) %>%
+  filter(cohort == "0.1-40") %>%
+  mutate(observed = 1) %>%
+  complete(Date = seq(min(Date), max(Date), by = "day")) %>%
+  mutate(year = as.factor(year(Date))) %>%
+  mutate(yearday = yday(Date)) %>%
+  mutate(month = format(Date, "%B")) %>%
+  mutate(month = factor(month, levels = c("January",
+                                          "February",
+                                          "March",
+                                          "April",
+                                          "May",
+                                          "June",
+                                          "July",
+                                          "August",
+                                          "September",
+                                          "October",
+                                          "November",
+                                          "December"))) %>%
+  replace_na(list(observed = 0)) %>%
+  mutate(angular_dir = 360*(yearday/365))
+
+ggplot(all_cohort_filled) +
+  stat_count(aes(x = month, fill = year),
+                 color = "white") +
+  coord_polar() +
+  scale_fill_viridis("Year", discrete = TRUE) +
+  theme(
+    # Remove axis ticks and text
+    axis.title = element_blank(), # Removing the x axis title
+    axis.ticks = element_blank(), # Removing the x axis ticks
+    axis.text.y = element_blank(), # Removing the y axis text
+    # Use gray text for the Treatment names
+    axis.text.x = element_text(color = "gray12", size = 12),  #Making the text grey to look asthetic
+    # Move the legend to the bottom
+    legend.position = "bottom",
+    
+    # Set default color and font family for the text
+    text = element_text(color = "gray12"),
+    
+    
+    # Make the background white and remove extra grid lines
+    panel.background = element_rect(fill = "white", color = "white"),
+    panel.grid = element_line("gray"),
+    panel.grid.major.x = element_line("gray")
+  ) +
+  annotate("text", x = 0.25, y = 550, label = "500", color = "gray") +
+  annotate("text", x = 0.25, y = 1050, label = "1000", color = "gray") +
+  annotate("text", x = 0.25, y = 1550, label = "1500", color = "gray") +
+  annotate("text", x = 0.25, y = 2050, label = "2000", color = "gray") 
+
+group_means <- all_cohort_filled %>%
+  group_by(year, month) %>%
+  count() %>%
+  ungroup() %>%
+  group_by(month) %>%
+  summarise(group_means = mean(n)) 
+
+
+ggplot(group_means) +
+  geom_col(aes(x = month, y = group_means, fill = group_means),
+                 color = "white") +
+  coord_polar() +
+  scale_fill_viridis("Mean abundance", option = "plasma") +
+  theme(
+    # Remove axis ticks and text
+    axis.title = element_blank(), # Removing the x axis title
+    axis.ticks = element_blank(), # Removing the x axis ticks
+    axis.text.y = element_blank(), # Removing the y axis text
+    # Use gray text for the Treatment names
+    axis.text.x = element_text(color = "gray12", size = 12),  #Making the text grey to look asthetic
+    # Move the legend to the bottom
+    legend.position = "bottom",
+    
+    # Set default color and font family for the text
+    text = element_text(color = "gray12"),
+    
+    
+    # Make the background white and remove extra grid lines
+    panel.background = element_rect(fill = "white", color = "white"),
+    panel.grid = element_line("gray"),
+    panel.grid.major.x = element_line("gray")
+  ) +
+  annotate("text", x = 0.25, y = 110, label = "100", color = "gray") +
+  annotate("text", x = 0.25, y = 210, label = "200", color = "gray") +
+  annotate("text", x = 0.25, y = 310, label = "300", color = "gray") +
+  annotate("text", x = 0.25, y = 410, label = "400", color = "gray")
+
+
+all_cohort_filled %>%
+  mutate(monu = case_when(month == "January" ~ 1,
+                          month == "February" ~ 2,
+                          month == "March" ~ 3,
+                          month == "April" ~ 4,
+                          month == "May" ~ 5,
+                          month == "June" ~ 6,
+                          month == "July" ~ 7,
+                          month == "August" ~ 8,
+                          month == "September" ~ 9,
+                          month == "October" ~ 10,
+                          month == "November" ~ 11,
+                          month == "December" ~ 12)) %>%
+  ggplot(aes(x = monu, y = Stipe),
+         color = year, fill = year) +
+  geom_point() +
+  stat_smooth(method = "loess", 
+              span = 1,
+              se = FALSE) +
+  facet_wrap( ~ year)
+
 ####
 #<<<<<<<<<<<<<<<<<<<<<<<<<<END OF SCRIPT>>>>>>>>>>>>>>>>>>>>>>>>#
 
 # SCRATCH PAD ####
-     
+all_sporophyte_cohort %>%
+  mutate(month = format(Date, "%B")) %>%
+  mutate(month = factor(month, levels = c("January",
+                                          "February",
+                                          "March",
+                                          "April",
+                                          "May",
+                                          "June",
+                                          "July",
+                                          "August",
+                                          "September",
+                                          "October",
+                                          "November",
+                                          "December"))) %>%
+ggplot() +
+  stat_count(aes(x = month, fill = cohort),
+             color = "white") +
+  coord_polar() +
+  scale_fill_viridis("Cohort", discrete = TRUE) +
+  theme(
+    # Remove axis ticks and text
+    axis.title = element_blank(), # Removing the x axis title
+    axis.ticks = element_blank(), # Removing the x axis ticks
+    axis.text.y = element_blank(), # Removing the y axis text
+    # Use gray text for the Treatment names
+    axis.text.x = element_text(color = "gray12", size = 12),  #Making the text grey to look asthetic
+    # Move the legend to the bottom
+    legend.position = "bottom",
+    
+    # Set default color and font family for the text
+    text = element_text(color = "gray12"),
+    
+    
+    # Make the background white and remove extra grid lines
+    panel.background = element_rect(fill = "white", color = "white"),
+    panel.grid = element_line("gray"),
+    panel.grid.major.x = element_line("gray")
+  ) +
+  annotate("text", x = 0.25, y = 550, label = "500", color = "gray") +
+  annotate("text", x = 0.25, y = 1050, label = "1000", color = "gray") +
+  annotate("text", x = 0.25, y = 1550, label = "1500", color = "gray") +
+  annotate("text", x = 0.25, y = 2050, label = "2000", color = "gray")
+
+all_sporophyte_cohort %>%
+  complete(Date = seq(min(Date), max(Date), by = "day"))
+
+
 # subset and write single and grouped individuals
 clustered <- young_sporophyte %>%
   filter(Single == 0) 
