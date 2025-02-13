@@ -32,6 +32,8 @@
 # PER KAIN 1987: stipe growth in <25cm ~2mm/day, 25-100cm ~5mm/day
 # PER DOBKOWSKI: juv <30-40, adult >200
 # PER NICHOLSON: stipe groth in juv ~2.5cm/day
+# SEND DAVE: # young sporophytes per year, total measured mature sporophytes,
+# the # mature holdfast, and total WhHf, ChWhHf, and BuWhHh
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -59,10 +61,12 @@ library(viridis)
 library(lme4)
 library(lubridate)
 library(ggpubr)
+library(leaflet)
 
 options(max.print = 9999)
 
-
+# function for "%notin%
+`%notin%` <- Negate(`%in%`)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # READ IN AND PREPARE DATA                                                  ####
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -78,9 +82,7 @@ mature_sporophyte <- read_csv("Data/mature_sporophyte_data.csv",
                                                sori_num = col_number(), 
                                                stipe_length = col_number()))
 
-# remove erroneous date (need to fix)
-mature_sporophyte <- mature_sporophyte %>%
-  filter(date != "1/3/1900") 
+# change erroneous date 
 mature_sporophyte$date <- mature_sporophyte$date %>%
   recode("7/12/2008" = "7/12/2018")
 # turn into date format
@@ -93,11 +95,11 @@ mature_sporophyte <- mature_sporophyte %>%
 # remove year so months overlap
 
 mature_sporophyte_monthly <- mature_sporophyte %>%
-  mutate(Date = as.Date.POSIXct(date, "%Y-%M-%D")) %>%
+  mutate(Date = as.Date.POSIXct(date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
   mutate(year = as.character(year(Date))) %>%
   mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
-  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", tz = "PT")) %>%
-  arrange(monthday)
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  arrange(monthday) 
 
 mature_sporophyte_cohort <- mature_sporophyte_monthly %>%
   mutate(cohort = case_when(
@@ -118,14 +120,14 @@ young_sporophyte <- read_csv("Data/young_sporophyte_data.csv",
                                                    Single = col_character(), 
                                                    Group = col_character()))
 
-# fix erroneous date
+ # fix erroneous date
 young_sporophyte$Date <- young_sporophyte$Date %>%
   recode("11/28/2028" = "11/28/2018",
          "10/9/2028" = "10/9/2018",
-         "6/17/2028" = "6/17/2018",
-         "56/2/2021" = "5/26/2021")
+         "6/17/2028" = "6/17/2018")
 young_sporophyte$Date <- mdy(young_sporophyte$Date)
 # fix bulb diameter and blade width typos
+young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 62.0] <- 6.2
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 53.0] <- 5.3
 young_sporophyte['Bulb'][young_sporophyte['Bulb'] == 30.0] <- 3.0
 young_sporophyte['Blade'][young_sporophyte['Blade'] == 22.0] <- 2.2
@@ -135,21 +137,15 @@ young_sporophyte$Subst <- young_sporophyte$Subst %>%
          "Ni" = "Nl",
          "MY" = "My",
          "R" = "Ro",
-         "B" = "Ba",
          "Bs" = "Ba",
-         "Bo" = "Ba",
-         "Bl" = "Nl",
-         "LS" = "Ls",
          "SS" = "Ss",
          "Hy" = "Hf",
-         "Mp" = "Mu",
          "Dl" = "Do")
 
 
 # fix CoSp1 typos
 young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
   recode("LS" = "Ls",
-         "Po" = "Pl",
          "Cor" = "Co",
          "Io" = "Is",
          "Tu" = "none",
@@ -158,15 +154,14 @@ young_sporophyte$CoSp1 <- young_sporophyte$CoSp1 %>%
          "By" = "Bo")
          
 # remove year so months overlap
+young_sporophyte$Date <- as.Date(young_sporophyte$Date, format = "%m/%d/%Y")
 
 young_sporophyte_monthly <- young_sporophyte %>%
-  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(Date = as.Date.POSIXct(Date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
   mutate(year = as.character(year(Date))) %>%
-  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), 
-                           "2020-%m-%d")) %>%
-  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", 
-                                    tz = "PT")) %>%
-  arrange(monthday)
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  arrange(monthday) 
 
 young_sporophyte_cohort <- young_sporophyte_monthly %>%
   mutate(cohort = case_when(
@@ -193,13 +188,11 @@ full_sporophyte <- young_step1 %>%
   filter(!is.na(Stipe))
 
 all_sporophyte_monthly <- full_sporophyte %>%
-  mutate(Date = as.Date.POSIXct(Date, "%Y-%M-%D")) %>%
+  mutate(Date = as.Date.POSIXct(Date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
   mutate(year = as.character(year(Date))) %>%
-  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), 
-                           "2020-%m-%d")) %>%
-  mutate(monthday = as.Date.POSIXct(monthday, "%Y-%M-%D", 
-                                    tz = "PT")) %>%
-  arrange(monthday)
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  arrange(monthday) 
 
 all_sporophyte_cohort <- all_sporophyte_monthly %>%
   mutate(cohort = case_when(
@@ -212,9 +205,46 @@ all_sporophyte_cohort <- all_sporophyte_monthly %>%
                                             "40.1-199.9",
                                             "200+")))
 
+# how many young sporophytes per year?
+all_sporophyte_cohort %>%
+  group_by(year, cohort) %>%
+  tally()
+
+# how many total mature sporophytes per year?
+all_sporophyte_cohort %>%
+  filter(cohort == "200+") %>%
+  group_by(year) %>%
+  tally()
+
+# mature holdfast, and total WhHf, ChWhHf, and BuWhHh
+holdfasts <- read_csv("Data/220109 Mature Holdfast.csv")
+holdfasts$Date <- as.Date(holdfasts$Date, format = "%m/%d/%Y") 
+holdfasts <- holdfasts %>%
+  mutate(year = as.character(year(Date)))
+holdfasts_long <- holdfasts %>%
+  select(Date:BuWhHf, year) %>%
+  pivot_longer(WhHf:BuWhHf, names_to = "holdfast", values_to = "counts")
+holdfasts_long %>%
+  group_by(holdfast, year) %>%
+  summarise(sum(as.numeric(counts), na.rm = TRUE))
+
+# Load basemap of Bandon
+bandon_basemap <- leaflet() %>% setView(lng = -124.43471, lat = 43.08380, zoom = 15)
+# Load transect shapefile
+transect <- read.csv("Data/transectArea.csv") 
+
+
+
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RECRUITMENT FIGURES                                                       ####
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# MAP OF TRANSECT
+bandon_basemap %>%
+  addProviderTiles(providers$Stadia.StamenToner) %>%
+  addPolygons(data = transect, lng = transect$lon, lat = transect$lat)
+
+
 
 all_sporophyte_cohort %>%
   ggplot() +
@@ -304,9 +334,35 @@ all_sporophyte_cohort %>%
         axis.title.y.right = element_text(vjust = 2)) +
   annotate(geom = "text", x = as.Date('2020-11-20'), y = 0.015, label = "n = 5211") 
 
+
+ts <- seq.POSIXt(as.POSIXlt("2018-01-01"), 
+                 as.POSIXlt("2023-12-31"), by="day")
+
+ts <- seq.POSIXt(as.POSIXct("2018-01-01", format = '%Y-%m-%d'), 
+                 as.POSIXct("2023-12-31", format = '%Y-%m-%d'), by="day")
+ts <- format.POSIXct(ts,'%Y-%m-%d')
+
+
 # juvenile only
-all_sporophyte_cohort %>%
+df <- data.frame(Date=ts) %>%
+  mutate(Date = as.Date.POSIXct(Date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(Stipe = 0) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(cohort = "0.1-40")
+
+nodate <- all_sporophyte_cohort %>%
   filter(cohort == "0.1-40") %>%
+  select(Date)
+juv_df <- df %>%
+  filter(Date %notin% nodate$Date)
+
+juv_dens <- all_sporophyte_cohort %>%
+  filter(cohort == "0.1-40") %>%
+  bind_rows(juv_df) %>%
+  replace(is.na(.), 0) %>%
+  filter(year != "2022") %>%
   ggplot() +
   scale_colour_viridis(option = "D", 
                        discrete = TRUE, 
@@ -320,15 +376,32 @@ all_sporophyte_cohort %>%
   stat_density(aes(x = monthday), 
               size = 1.5, col = "black") +
   stat_density(aes(x = monthday, col = cohort), 
-              size = 1) +
+              size = 1, fill = "grey50") +
   theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.9), 
+  theme(axis.title.x = element_blank(), 
         axis.title.y.right = element_text(vjust = 2)) +
-  facet_wrap(.~year, ncol = 1, scales = "free_y")
+  facet_wrap(.~year, ncol = 1)
 
 # intermediate only
-all_sporophyte_cohort %>%
+df <- data.frame(Date=ts) %>%
+  mutate(Date = as.Date.POSIXct(Date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(Stipe = 0) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(cohort = "40.1-199.9")
+
+nodate <- all_sporophyte_cohort %>%
   filter(cohort == "40.1-199.9") %>%
+  select(Date)
+int_df <- df %>%
+  filter(Date %notin% nodate$Date)
+
+int_dens <- all_sporophyte_cohort %>%
+  filter(cohort == "40.1-199.9") %>%
+  bind_rows(int_df) %>%
+  replace(is.na(.), 0) %>%
+  filter(year != "2022") %>%
   ggplot() +
   scale_colour_viridis(option = "D", 
                        discrete = TRUE, 
@@ -342,15 +415,32 @@ all_sporophyte_cohort %>%
   stat_density(aes(x = monthday), 
                size = 1.5, col = "black") +
   stat_density(aes(x = monthday, col = cohort), 
-               size = 1) +
+               size = 1, fill = "grey50") +
   theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.9), 
-        axis.title.y.right = element_text(vjust = 2)) +
-  facet_wrap(.~year, ncol = 1, scales = "free_y")
+  theme(axis.title.y = element_blank()) +
+  facet_wrap(.~year, ncol = 1)
 
 # mature only
-all_sporophyte_cohort %>%
+df <- data.frame(Date=ts) %>%
+  mutate(Date = as.Date.POSIXct(Date, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(Stipe = 0) %>%
+  mutate(year = as.character(year(Date))) %>%
+  mutate(monthday = format(as.Date.POSIXct(Date, "%Y-%M-%D"), "2020-%m-%d")) %>%
+  mutate(monthday = as.Date.POSIXct(monthday, format = "%Y-%M-%D", tz = "PST8PDT")) %>%
+  mutate(cohort = "200+")
+
+nodate <- all_sporophyte_cohort %>%
   filter(cohort == "200+") %>%
+  select(Date)
+mat_df <- df %>%
+  filter(Date %notin% nodate$Date)
+
+mat_dens <- all_sporophyte_cohort %>%
+  filter(cohort == "200+") %>%
+  bind_rows(mat_df) %>%
+  replace(is.na(.), 0) %>%
+  filter(year %notin% c("2022")) %>%
+  filter(Date < "2023-01-02") %>%
   ggplot() +
   scale_colour_viridis(option = "D", 
                        discrete = TRUE, 
@@ -364,11 +454,16 @@ all_sporophyte_cohort %>%
   stat_density(aes(x = monthday), 
                size = 1.5, col = "black") +
   stat_density(aes(x = monthday, col = cohort), 
-               size = 1) +
+               size = 1, fill = "grey50") +
   theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.9), 
-        axis.title.y.right = element_text(vjust = 2)) +
-  facet_wrap(.~year, ncol = 1, scales = "free_y")
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank()) +
+  facet_wrap(.~year, ncol = 1)
+
+# ggarrange figure
+ggarrange(juv_dens, int_dens, mat_dens,
+          ncol = 3, nrow = 1, labels = c("A", "B", "C"),
+          align = "hv", legend = "none")
 
 
 # sori number
