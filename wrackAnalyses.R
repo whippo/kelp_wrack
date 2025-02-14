@@ -34,6 +34,8 @@
 # PER NICHOLSON: stipe groth in juv ~2.5cm/day
 # SEND DAVE: # young sporophytes per year, total measured mature sporophytes,
 # the # mature holdfast, and total WhHf, ChWhHf, and BuWhHh
+# what is the relationship between mature and juvenile sporophytes from one
+# year to the next?
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1693,6 +1695,17 @@ ggplot(snapLong) +
   geom_col(aes(x = breakage, y = value, fill = breakage)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.1, end = 0.8) +
   theme_bw()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
