@@ -245,6 +245,7 @@ bandon_basemap %>%
   addPolygons(data = transect, lng = transect$lon, lat = transect$lat)
 
 
+# DOT AND DENSITY PLOT OF ALL COHORTS
 
 all_sporophyte_cohort %>%
   ggplot() +
@@ -561,53 +562,34 @@ mature_sporophyte_monthly %>%
 
   
 
+# DOT AND DENSITY PLOT OF ALL COHORTS - different cutoffs
+alt_sporophyte_cohort <- all_sporophyte_monthly %>%
+  mutate(cohort = case_when(
+    Stipe <= 40 ~ "0.1-40",
+    Stipe < 180 ~ "40.1-179.9",
+    Stipe >= 180 ~ "180+")
+  ) %>%
+  filter(!is.na(cohort)) %>%
+  mutate(cohort = factor(cohort, levels = c("0.1-40",
+                                            "40.1-179.9",
+                                            "180+")))
 
-
-
-## THIS FINALLY WORKED! STIPE LENGTH DOTPLOT AND DENSITY DISTRIBUTION IN ONE FIGURE!
-
-# color coded by length
-
-young_sporophyte_cohort %>%
-  filter(is.na(Stipe) | Stipe <= 100) %>%
+alt_sporophyte_cohort %>%
   ggplot() +
-  geom_point(aes(x = monthday, y = Stipe/5600, col = cohort), alpha = 0.4) +
+  geom_point(aes(x = monthday, y = log10(Stipe+1)/185, col = cohort), alpha = 0.4) +
   scale_y_continuous(
-    name = "Stipe Length (cm)", lim = c(0,0.018), n.breaks = 6, labels = c("0", "25", "50", "75", "100"), 
+    name = "Log + 1 Stipe Length", 
+    lim = c(0,0.018), 
+    n.breaks = 6, 
+    labels = c("0", "1", "2", "3", "4"), 
     sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
-  scale_colour_viridis(option = "A", discrete = TRUE, begin = 0.8, end = 0.2, breaks = c("0.1-15", "15.1-20", "20.1-100")) +
-  scale_x_date(name = "Month", limits = as.Date(c('2020-05-01', '2020-10-01'), format="%Y-%M-%D"), 
-               date_breaks = "1 month",
-               date_labels = ("%b")) +
-  geom_density(aes(monthday, group = cohort), inherit.aes = FALSE, size = 1.5, col = "black") +
-  geom_density(aes(monthday, color = cohort), inherit.aes = FALSE, size = 1) +
-  theme_bw() +
-  theme(axis.text.x = element_text(hjust = -0.9), 
-        axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", x = as.Date('2020-11-15'), y = 0.015, label = "n = 4228")
-
-
-## THIS FINALLY WORKED! STIPE LENGTH DOTPLOT AND DENSITY DISTRIBUTION IN ONE FIGURE!
-
-# mature sporophyte
-
-mature_sporophyte_cohort %>%
-  filter(!is.na(stipe_length) | stipe_length > 35) %>%
-  ggplot() +
-  geom_point(aes(x = monthday, 
-                 y = stipe_length/200000, 
-                 col = cohort), alpha = 0.4) +
-  scale_y_continuous(
-    name = "Stipe Length (cm)", 
-    lim = c(0,0.01), n.breaks = 3, 
-    labels = c("0", "1000", "2000"), 
-    sec.axis = sec_axis(trans = ~.*1, "Stipe Count Density Distribution")) +
-  scale_colour_viridis(option = "A", 
+  scale_colour_viridis(option = "D", 
                        discrete = TRUE, 
-                       begin = 0.8, 
-                       end = 0.2, 
-                       breaks = c("35-150", "151-1000", ">1000")) +
+                       begin = 0.9, 
+                       end = 0.2) +
   scale_x_date(name = "Month", 
+               limits = as.Date(c('2020-01-01', '2020-12-31'), 
+                                format="%Y-%M-%D"), 
                date_breaks = "1 month",
                date_labels = ("%b")) +
   geom_density(aes(monthday, group = cohort), 
@@ -617,10 +599,8 @@ mature_sporophyte_cohort %>%
   theme_bw() +
   theme(axis.text.x = element_text(hjust = -0.9), 
         axis.title.y.right = element_text(vjust = 2)) +
-  annotate(geom = "text", 
-           x = as.Date('2020-11-15'), 
-           y = 0.0095, 
-           label = "n = 3351")
+  annotate(geom = "text", x = as.Date('2020-11-20'), y = 0.018, label = "n = 9743")
+
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # RECRUITMENT MODEL                                                         ####
